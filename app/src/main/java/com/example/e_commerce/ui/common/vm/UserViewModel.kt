@@ -1,22 +1,22 @@
-package com.example.e_commerce.ui.common.vm
-
+package com.example.e_commerce.ui.common.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
-import com.example.e_commerce.data.repositry.UserPreferencesRepository
+import com.example.e_commerce.data.repository.user.UserDataStoreRepositoryImpl
+import kotlinx.coroutines.launch
 
 class UserViewModel(
-    private val userPreferencesRepository: UserPreferencesRepository
+    private val userPreferencesRepository: UserDataStoreRepositoryImpl
 ) : ViewModel() {
-    val isUserLoggedIn = userPreferencesRepository.isUserLoggedIn
-    suspend fun saveLoginState(isLoggedIn: Boolean) {
-        userPreferencesRepository.saveLoginState(isLoggedIn)
-    }
 
+    fun isUserLoggedIn() = viewModelScope.launch {
+        userPreferencesRepository.isUserLoggedIn()
+    }
 }
 
-class UserViewModelFactory(private val userPreferencesRepository: UserPreferencesRepository) :
+class UserViewModelFactory(private val userPreferencesRepository: UserDataStoreRepositoryImpl) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
         if (modelClass.isAssignableFrom(UserViewModel::class.java)) {
