@@ -8,7 +8,6 @@ import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.animation.AnticipateInterpolator
 import androidx.activity.viewModels
@@ -17,19 +16,20 @@ import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import com.example.e_commerce.R
+import com.example.e_commerce.data.datasource.datastore.UserPreferencesDataSource
 import com.example.e_commerce.data.repository.user.UserDataStoreRepositoryImpl
 import com.example.e_commerce.ui.common.viewmodel.UserViewModel
 import com.example.e_commerce.ui.common.viewmodel.UserViewModelFactory
-import com.example.e_commerce.ui.login.AuthActivity
+import com.example.e_commerce.ui.auth.AuthActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import org.checkerframework.common.returnsreceiver.qual.This
 
 class MainActivity : AppCompatActivity() {
 
     private val userViewModel: UserViewModel by viewModels {
-        UserViewModelFactory(UserDataStoreRepositoryImpl(this@MainActivity))
+        UserViewModelFactory(UserDataStoreRepositoryImpl(UserPreferencesDataSource(this)))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         lifecycleScope.launch(Dispatchers.Main) {
             val isLoggedIn = userViewModel.isUserLoggedIn().first()
-            Log.d(TAG, "onCreate: isLoggedIn: $isLoggedIn")
+        //    Log.d(TAG, "onCreate: isLoggedIn: $isLoggedIn")
             if (isLoggedIn) {
                 setContentView(R.layout.activity_main)
             } else {

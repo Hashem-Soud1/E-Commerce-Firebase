@@ -1,4 +1,4 @@
-package com.example.e_commerce.ui.login
+package com.example.e_commerce.ui.auth
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

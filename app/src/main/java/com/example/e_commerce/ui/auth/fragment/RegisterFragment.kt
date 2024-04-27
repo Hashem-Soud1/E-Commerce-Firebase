@@ -1,4 +1,4 @@
-package com.example.e_commerce.ui.login.fragment
+package com.example.e_commerce.ui.auth.fragment
 
 
 
