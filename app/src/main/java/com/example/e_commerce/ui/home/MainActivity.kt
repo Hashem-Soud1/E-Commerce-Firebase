@@ -37,11 +37,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         lifecycleScope.launch(Dispatchers.Main) {
             val isLoggedIn = userViewModel.isUserLoggedIn().first()
-        //    Log.d(TAG, "onCreate: isLoggedIn: $isLoggedIn")
+
             if (isLoggedIn) {
                 setContentView(R.layout.activity_main)
             } else {
-                userViewModel.setIsLoggedIn(true)
                 goToAuthActivity()
             }
         }

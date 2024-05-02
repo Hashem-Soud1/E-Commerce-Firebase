@@ -10,6 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.e_commerce.R
 import com.example.e_commerce.data.datasource.datastore.UserPreferencesDataSource
+import com.example.e_commerce.data.repository.auth.FirebaseAuthRepository
+import com.example.e_commerce.data.repository.auth.FirebaseAuthRepositoryImpl
 
 import com.example.e_commerce.data.repository.user.UserDataStoreRepositoryImpl
 import com.example.e_commerce.databinding.FragmentLoginBinding
@@ -19,12 +21,12 @@ import java.util.zip.Inflater
 
 class LoginFragment : Fragment() {
 
-    val loginViewModel: LoginViewModel by viewModels {
+    private val loginViewModel: LoginViewModel by viewModels {
         LoginViewModelFactory(
             userPrefs = UserDataStoreRepositoryImpl(
                 UserPreferencesDataSource(
                     requireActivity()
-                ))
+                )), authFirebase = FirebaseAuthRepositoryImpl()
         )
     }
 
@@ -34,7 +36,14 @@ class LoginFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         _binding =FragmentLoginBinding.inflate(inflater, container, false)
+        binding.viewmodel=loginViewModel
+        binding.lifecycleOwner=viewLifecycleOwner
         return _binding?.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
     }
 
     override fun onDestroyView() {

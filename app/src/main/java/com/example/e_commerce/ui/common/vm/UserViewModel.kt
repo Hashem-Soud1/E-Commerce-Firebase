@@ -10,7 +10,7 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 
 class UserViewModel(
-    private val userPreferencesRepository: UserDataStoreRepositoryImpl
+    private val userPreferencesRepository: UserPreferenceRepository
 ) : ViewModel() {
 
 
@@ -23,7 +23,7 @@ class UserViewModel(
 
 }
 
-class UserViewModelFactory(private val userPreferencesRepository: UserDataStoreRepositoryImpl) :
+class UserViewModelFactory(private val userPreferencesRepository: UserPreferenceRepository) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
         if (modelClass.isAssignableFrom(UserViewModel::class.java)) {
