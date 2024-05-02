@@ -4,7 +4,7 @@
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="auth_welcome_msg" translatable="false">Welcome my App</string>
     <string name="sign_in_msg" translatable="false">Sign in to continue</string>
-    <string name="email_et_hint" translatable="false">Your Email</string>
+    <string name="email_et_hint" translatable="false">Email</string>
     <string name="password_et_hint" translatable="false">Password</string>
     <string name="sign_in" translatable="false">Sign in</string>
     <string name="or" translatable="false">Or</string>
