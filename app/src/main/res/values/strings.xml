@@ -13,5 +13,6 @@
     <string name="forgot_password_msg" translatable="false">Forgot Password?</string>
     <string name="dont_have_a_account_msg" translatable="false">Don’t have a account?</string>
     <string name="register" translatable="false">Register</string>
+    <string name="loading">loading</string>
 
 </resources>
