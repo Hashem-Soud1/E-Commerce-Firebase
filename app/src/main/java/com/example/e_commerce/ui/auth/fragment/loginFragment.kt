@@ -72,7 +72,7 @@ class LoginFragment : Fragment() {
     private fun authLogin() {
 
         lifecycleScope.launch{
-          loginViewModel.loginState.collect{state -> state?.let { resource ->
+          loginViewModel.loginState.collect{ resource ->
             when(resource)
             {
                 is Resource.Loading ->  { progressDialog.show()
@@ -92,7 +92,7 @@ class LoginFragment : Fragment() {
 
 }
 
-    }
+
 
 
     companion object {
