@@ -29,6 +29,15 @@ android {
                 "proguard-rules.pro"
             )
         }
+
+
+        forEach {
+            it.buildConfigField(
+                "String",
+                "clientServerId",
+                "\"53560344412-bl95glbt582ivfsnjejqj7gerqhufo3t.apps.googleusercontent.com\""
+            )
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -70,12 +79,16 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     // firebase dependencies
-    implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
+    implementation(platform("com.google.firebase:firebase-bom:33.0.0"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-crashlytics")
     implementation("com.google.firebase:firebase-firestore-ktx")
     implementation("com.google.firebase:firebase-auth-ktx")
-    implementation("com.google.android.gms:play-services-auth:21.0.0")
+    implementation("com.google.android.gms:play-services-auth:21.1.1")
+
+    //facebook
+    implementation ("com.facebook.android:facebook-android-sdk:17.0.0")
+
 
 
     // third party libraries
