@@ -4,7 +4,6 @@ package com.example.e_commerce.ui.auth.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,8 +23,7 @@ import com.example.e_commerce.databinding.FragmentLoginBinding
 import com.example.e_commerce.ui.auth.viewmodel.LoginViewModel
 import com.example.e_commerce.ui.auth.viewmodel.LoginViewModelFactory
 import com.example.e_commerce.ui.common.repository.ProgressDialog
-import com.example.e_commerce.ui.showSnakeBarError
-import com.facebook.AccessToken
+import com.example.e_commerce.utils.showSnakeBarError
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
@@ -56,10 +54,6 @@ class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private  val binding get() = _binding!!
 
-    private val progressDialog by lazy {
-        ProgressDialog.createProgressDialog(requireActivity())
-    }
-
     private val callbackManager: CallbackManager by lazy {
         CallbackManager.Factory.create()
     }
@@ -68,7 +62,9 @@ class LoginFragment : Fragment() {
         LoginManager.getInstance()
     }
 
-
+    private val progressDialog by lazy {
+        ProgressDialog.createProgressDialog(requireActivity())
+    }
 
 
 
@@ -87,7 +83,6 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         initListener()
         initViewModel()
     }
@@ -104,6 +99,23 @@ class LoginFragment : Fragment() {
             loginWithFacebookRequest()
         }
     }
+
+    private fun initViewModel() {
+
+        lifecycleScope.launch{
+            loginViewModel.loginState.collect{ resource ->
+                when(resource)
+                {
+                    is Resource.Loading ->   progressDialog.show()
+                    is Resource.Success ->  progressDialog.dismiss()
+                    is Resource.Error   -> progressDialog.dismiss()
+
+
+                }
+            }
+        }
+    }
+
 
     private fun loginWithGoogleRequest() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -146,22 +158,26 @@ class LoginFragment : Fragment() {
     }
 
 
-
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        callbackManager.onActivityResult(requestCode, resultCode, data)
+    }
 
     private fun loginWithFacebookRequest() {
 
-      // signOut()
+      signOut()
 
         loginManager.registerCallback(callbackManager,object :FacebookCallback<LoginResult>{
 
           override fun onSuccess(result: LoginResult) {
-                val token = result.accessToken.token
-                firebaseAuthWithFacebook(token)
+
+                val idToken = result.accessToken.token
+                firebaseAuthWithFacebook(idToken)
             }
             override fun onCancel() {}
 
             override fun onError(error: FacebookException) {
-                view?.showSnakeBarError("ddddddddddddddddd")
+                view?.showSnakeBarError(R.string.facebook_sign_in_field_msg.toString())
             }
         })
 
@@ -172,10 +188,7 @@ class LoginFragment : Fragment() {
 
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        callbackManager.onActivityResult(requestCode, resultCode, data)
-    }
+
 
     private fun signOut() {
         loginManager.logOut()
@@ -191,21 +204,7 @@ class LoginFragment : Fragment() {
         loginViewModel.loginWithFacebook(idToken)
     }
 
-    private fun initViewModel() {
 
-        lifecycleScope.launch{
-            loginViewModel.loginState.collect{ resource ->
-                when(resource)
-                {
-                    is Resource.Loading ->   progressDialog.show()
-                    is Resource.Success ->  progressDialog.dismiss()
-                    is Resource.Error   -> progressDialog.dismiss()
-
-
-                }
-            }
-        }
-    }
 
 }
 

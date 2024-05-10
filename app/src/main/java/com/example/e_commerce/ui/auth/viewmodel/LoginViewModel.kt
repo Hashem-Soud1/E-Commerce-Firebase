@@ -7,6 +7,8 @@ import com.example.e_commerce.data.models.Resource
 import com.example.e_commerce.data.repository.auth.FirebaseAuthRepository
 import com.example.e_commerce.data.repository.user.UserPreferenceRepository
 import com.example.e_commerce.utils.isValidEmail
+import com.example.e_commerce.utils.isValidPassword
+
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,12 +31,13 @@ class LoginViewModel(
     val password = MutableStateFlow("")
 
     private val isLoginIsValid: Flow<Boolean> = combine(email, password) { email, password ->
-        email.isValidEmail() && password.length >= 6
+        email.isValidEmail() && password.isValidPassword()
     }
 
     //use all way of Login
     private val _loginState = MutableSharedFlow<Resource<String>>()
     val loginState :SharedFlow<Resource<String>> = _loginState.asSharedFlow()
+
 
     fun loginWithEmailAndPassword() {
     viewModelScope.launch {
@@ -84,6 +87,7 @@ class LoginViewModel(
                 }
             }.launchIn(viewModelScope)
         }
+
 
 
 

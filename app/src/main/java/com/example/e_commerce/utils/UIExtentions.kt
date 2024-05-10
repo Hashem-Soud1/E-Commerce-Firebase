@@ -1,4 +1,4 @@
-package com.example.e_commerce.ui
+package com.example.e_commerce.utils
 
 import android.view.View
 import androidx.core.content.ContextCompat
