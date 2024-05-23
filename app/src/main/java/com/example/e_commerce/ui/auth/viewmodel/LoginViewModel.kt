@@ -1,12 +1,19 @@
 package com.example.e_commerce.ui.auth.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.e_commerce.data.datasource.datastore.AppPreferenceDataStore
 import com.example.e_commerce.data.models.Resource
 import com.example.e_commerce.data.repository.auth.FirebaseAuthRepository
+import com.example.e_commerce.data.repository.auth.FirebaseAuthRepositoryImpl
+import com.example.e_commerce.data.repository.common.AppDataStoreRepositoryImpl
 import com.example.e_commerce.data.repository.common.AppPreferenceRepository
+import com.example.e_commerce.data.repository.user.UserFirestoreRepository
+import com.example.e_commerce.data.repository.user.UserFirestoreRepositoryImp
 import com.example.e_commerce.data.repository.user.UserPreferenceRepository
+import com.example.e_commerce.data.repository.user.UserPreferenceRepositoryImpl
 import com.example.e_commerce.utils.isValidEmail
 import com.example.e_commerce.utils.isValidPassword
 
@@ -25,6 +32,7 @@ class LoginViewModel(
     private val  appPreferenceRepository  : AppPreferenceRepository,
     private  val userPreferenceRepository: UserPreferenceRepository,
     private val authRepository: FirebaseAuthRepository,
+    private val userFirestoreRepository: UserFirestoreRepository
 ) : ViewModel() {
 
 
@@ -110,14 +118,25 @@ class LoginViewModel(
 }
 
 class LoginViewModelFactory(
-    private val  appPreferenceRepository  : AppPreferenceRepository,
-    private  val userPreferenceRepository: UserPreferenceRepository,
-    private val authRepository: FirebaseAuthRepository
+    private val contextValue: Context
 ) : ViewModelProvider.Factory {
+
+    private val appPreferenceRepository: AppPreferenceRepository =
+        AppDataStoreRepositoryImpl(AppPreferenceDataStore(contextValue))
+    private val userPreferenceRepository: UserPreferenceRepository =
+        UserPreferenceRepositoryImpl(contextValue)
+    private val authRepository: FirebaseAuthRepository =
+        FirebaseAuthRepositoryImpl()
+    private val userFirestoreRepository: UserFirestoreRepository =
+        UserFirestoreRepositoryImp()
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return LoginViewModel(appPreferenceRepository,userPreferenceRepository, authRepository) as T
+            @Suppress("UNCHECKED_CAST") return LoginViewModel(
+                appPreferenceRepository,
+                userPreferenceRepository,
+                authRepository,
+                userFirestoreRepository
+            ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

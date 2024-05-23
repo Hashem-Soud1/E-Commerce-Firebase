@@ -45,16 +45,7 @@ class LoginFragment : Fragment() {
 
 
     private val loginViewModel: LoginViewModel by viewModels {
-        LoginViewModelFactory(
-            appPreferenceRepository = AppDataStoreRepositoryImpl(
-               AppPreferenceDataStore(
-                    requireActivity()
-                )),
-            userPreferenceRepository = UserPreferenceRepositoryImpl(
-                requireActivity()
-                )
-            , authRepository = FirebaseAuthRepositoryImpl()
-        )
+        LoginViewModelFactory(contextValue = requireContext())
     }
 
     private var _binding: FragmentLoginBinding? = null
