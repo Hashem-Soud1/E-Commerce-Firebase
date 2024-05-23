@@ -8,6 +8,7 @@ import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.animation.AnticipateInterpolator
 import android.widget.TextView
@@ -23,6 +24,7 @@ import com.example.e_commerce.ui.common.viewmodel.UserViewModel
 import com.example.e_commerce.ui.common.viewmodel.UserViewModelFactory
 import com.example.e_commerce.ui.auth.AuthActivity
 import kotlinx.coroutines.Dispatchers
+
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -49,13 +51,22 @@ class MainActivity : AppCompatActivity() {
                     logOut()
                 }
             }
-
+        initViewModel()
     }
 
 
-    override fun onResume() {
-        super.onResume()
 
+    private fun initViewModel() {
+
+        lifecycleScope.launch {
+            val userDetails = runBlocking { userViewModel.getUserPrefsDetails().first() }
+            Log.d(TAG, "initViewModel: user details ${userDetails.email}")
+
+            userViewModel.userPrefsState.collect {
+                Log.d(TAG, "initViewModel: user details updated ${it?.email}")
+            }
+
+        }
     }
 
     private fun goToAuthActivity() {
@@ -67,6 +78,7 @@ class MainActivity : AppCompatActivity() {
         )
         startActivity(intent, options.toBundle())
     }
+
     private fun logOut() {
         lifecycleScope.launch {
             userViewModel.logout()

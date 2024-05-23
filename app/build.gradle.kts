@@ -5,6 +5,8 @@ plugins {
     id("com.google.firebase.crashlytics")
     id("kotlin-kapt")
     id("com.google.protobuf") version "0.9.4" apply true
+    id("kotlin-parcelize")
+
 
 
 }
