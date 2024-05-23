@@ -5,28 +5,38 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.e_commerce.data.repository.common.AppPreferenceRepository
+import com.example.e_commerce.data.repository.user.UserFirestoreRepository
+import com.example.e_commerce.data.repository.user.UserFirestoreRepositoryImp
+import com.example.e_commerce.data.repository.user.UserPreferenceRepository
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 
 class UserViewModel(
-    private val userPreferencesRepository: AppPreferenceRepository
+    private val appPreferencesRepository: AppPreferenceRepository,
+    private val userPreferencesRepository:UserPreferenceRepository,
+    private val userFirestoreRepository: UserFirestoreRepository
 ) : ViewModel() {
 
 
-    suspend fun isUserLoggedIn() = userPreferencesRepository.isUserLoggedIn()
+    suspend fun isUserLoggedIn() = appPreferencesRepository.isUserLoggedIn()
     fun setIsLoggedIn(b: Boolean) {
         viewModelScope.launch(IO) {
-            userPreferencesRepository.saveLoginState(b)
+            appPreferencesRepository.saveLoginState(b)
         }
     }
 
 }
 
-class UserViewModelFactory(private val userPreferencesRepository: AppPreferenceRepository) :
+class UserViewModelFactory(
+
+    private val  appPreferencesRepository: AppPreferenceRepository,
+    private val  userPreferencesRepository:UserPreferenceRepository,
+    private val  userFirestoreRepository: UserFirestoreRepository ):
     ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
         if (modelClass.isAssignableFrom(UserViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST") return UserViewModel(userPreferencesRepository) as T
+            @Suppress("UNCHECKED_CAST")
+            return UserViewModel(appPreferencesRepository,userPreferencesRepository,userFirestoreRepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

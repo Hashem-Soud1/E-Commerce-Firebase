@@ -19,10 +19,12 @@ import com.example.e_commerce.data.models.Resource
 import com.example.e_commerce.data.repository.auth.FirebaseAuthRepositoryImpl
 
 import com.example.e_commerce.data.repository.common.AppDataStoreRepositoryImpl
+import com.example.e_commerce.data.repository.user.UserPreferenceRepositoryImpl
 import com.example.e_commerce.databinding.FragmentLoginBinding
 import com.example.e_commerce.ui.auth.viewmodel.LoginViewModel
 import com.example.e_commerce.ui.auth.viewmodel.LoginViewModelFactory
-import com.example.e_commerce.ui.common.repository.ProgressDialog
+import com.example.e_commerce.ui.common.model.ProgressDialog
+import com.example.e_commerce.ui.home.MainActivity
 import com.example.e_commerce.utils.showSnakeBarError
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
@@ -44,10 +46,14 @@ class LoginFragment : Fragment() {
 
     private val loginViewModel: LoginViewModel by viewModels {
         LoginViewModelFactory(
-            userPrefs = AppDataStoreRepositoryImpl(
+            appPreferenceRepository = AppDataStoreRepositoryImpl(
                AppPreferenceDataStore(
                     requireActivity()
-                )), authRepository = FirebaseAuthRepositoryImpl()
+                )),
+            userPreferenceRepository = UserPreferenceRepositoryImpl(
+                requireActivity()
+                )
+            , authRepository = FirebaseAuthRepositoryImpl()
         )
     }
 
@@ -107,13 +113,23 @@ class LoginFragment : Fragment() {
                 when(resource)
                 {
                     is Resource.Loading ->   progressDialog.show()
-                    is Resource.Success ->  progressDialog.dismiss()
+                    is Resource.Success ->  {
+                        progressDialog.dismiss()
+                        goToHome()
+                    }
                     is Resource.Error   -> progressDialog.dismiss()
 
 
                 }
             }
         }
+    }
+
+    private fun goToHome() {
+        requireActivity().startActivity(Intent(activity, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        })
+        requireActivity().finish()
     }
 
 

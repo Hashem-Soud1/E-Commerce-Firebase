@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.e_commerce.data.models.Resource
 import com.example.e_commerce.data.repository.auth.FirebaseAuthRepository
 import com.example.e_commerce.data.repository.common.AppPreferenceRepository
+import com.example.e_commerce.data.repository.user.UserPreferenceRepository
 import com.example.e_commerce.utils.isValidEmail
 import com.example.e_commerce.utils.isValidPassword
 
@@ -21,7 +22,8 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
-    private val userPrefs: AppPreferenceRepository,
+    private val  appPreferenceRepository  : AppPreferenceRepository,
+    private  val userPreferenceRepository: UserPreferenceRepository,
     private val authRepository: FirebaseAuthRepository,
 ) : ViewModel() {
 
@@ -50,7 +52,10 @@ class LoginViewModel(
 
           when (resource) {
            is Resource.Loading -> _loginState.emit(Resource.Loading())
-           is Resource.Success -> _loginState.emit(Resource.Success(resource.data ?: "Empty User Id"))
+           is Resource.Success -> {
+               savePrefrencesData(resource.data!!)
+               _loginState.emit(Resource.Success(resource.data ?: "Empty User Id"))
+           }
            is Resource.Error ->   _loginState.emit(Resource.Error(resource.exception ?: Exception("Unknown error")))
           }
                 }.launchIn(viewModelScope)
@@ -60,13 +65,23 @@ class LoginViewModel(
 
         }
     }
+
+    private suspend fun  savePrefrencesData(userId: String) {
+
+            appPreferenceRepository.saveLoginState(true)
+            userPreferenceRepository.updateUserId(userId)
+        }
+
     fun loginWithGoogle(idToken: String)=
         viewModelScope.launch {
        authRepository.loginWithGoogle(idToken).onEach { resource ->
 
         when(resource)
         {
-            is Resource.Success -> _loginState.emit(Resource.Success(resource.data?:"Empty"))
+            is Resource.Success ->{
+                savePrefrencesData(resource.data!!)
+                _loginState.emit(Resource.Success(resource.data?:"Empty"))
+            }
 
             else -> _loginState.emit(resource)
 
@@ -80,7 +95,10 @@ class LoginViewModel(
 
                 when(resource)
                 {
-                    is Resource.Success -> _loginState.emit(Resource.Success(resource.data?:"Empty"))
+                    is Resource.Success -> {
+                        savePrefrencesData(resource.data!!)
+                        _loginState.emit(Resource.Success(resource.data?:"Empty"))
+                    }
 
                     else -> _loginState.emit(resource)
 
@@ -89,21 +107,17 @@ class LoginViewModel(
         }
 
 
-
-
-
-    companion object {
-        private const val TAG = "LoginViewModel"
-    }
 }
 
 class LoginViewModelFactory(
-    private val userPrefs: AppPreferenceRepository,
+    private val  appPreferenceRepository  : AppPreferenceRepository,
+    private  val userPreferenceRepository: UserPreferenceRepository,
     private val authRepository: FirebaseAuthRepository
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST") return LoginViewModel(userPrefs, authRepository) as T
+            @Suppress("UNCHECKED_CAST")
+            return LoginViewModel(appPreferenceRepository,userPreferenceRepository, authRepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

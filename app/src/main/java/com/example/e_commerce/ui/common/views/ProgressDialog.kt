@@ -1,4 +1,4 @@
-package com.example.e_commerce.ui.common.repository
+package com.example.e_commerce.ui.common.model
 
 import android.app.Dialog
 import android.content.Context
