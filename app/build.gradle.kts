@@ -4,6 +4,8 @@ plugins {
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
     id("kotlin-kapt")
+    id("com.google.protobuf") version "0.9.4" apply true
+
 
 }
 
@@ -37,18 +39,19 @@ android {
                 "clientServerId",
                 "\"53560344412-bl95glbt582ivfsnjejqj7gerqhufo3t.apps.googleusercontent.com\""
             )
-            it.buildConfigField(
-                "String",
+            it.resValue(
+                "string",
                 "facebook_app_id",
                 "\"741267654832744\""
             )
-            it.buildConfigField(
-                "String",
+
+            it.resValue(
+                "string",
                 "fb_login_protocol_scheme",
                 "\"fb741267654832744\""
             )
-            it.buildConfigField(
-                "String",
+            it.resValue(
+                "string",
                 "facebook_client_token",
                 "\"7d6b0a2a869d4265144f514942567051\""
             )
@@ -93,6 +96,8 @@ dependencies {
     implementation("androidx.fragment:fragment-ktx:1.6.2")
     implementation("androidx.activity:activity-ktx:1.8.2")
     implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation("com.google.protobuf:protobuf-kotlin-lite:4.26.0")
+
 
     // firebase dependencies
     implementation(platform("com.google.firebase:firebase-bom:33.0.0"))
@@ -110,5 +115,28 @@ dependencies {
     // third party libraries
     implementation("com.github.pwittchen:reactivenetwork-rx2:3.0.8")
 
-
 }
+
+// Setup protobuf configuration, generating lite Java and Kotlin classes
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:4.26.1"
+    }
+    generateProtoTasks {
+        all().forEach { task ->
+            task.builtins {
+                register("java") {
+                    option("lite")
+                }
+                register("kotlin") {
+                    option("lite")
+                }
+            }
+        }
+    }
+}
+
+
+
+
+
