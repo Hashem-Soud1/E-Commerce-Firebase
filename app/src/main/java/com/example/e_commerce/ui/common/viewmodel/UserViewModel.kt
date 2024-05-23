@@ -17,6 +17,7 @@ import com.example.e_commerce.data.repository.user.UserPreferenceRepositoryImpl
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -28,7 +29,7 @@ class UserViewModel(
 
     // load user data in state flow inside view model  scope
     val userPrefsState = userPreferencesRepository.getUserDetails()
-        .stateIn(viewModelScope, started = SharingStarted.Eagerly, initialValue = null)
+        .stateIn(viewModelScope, started = SharingStarted.WhileSubscribed(), initialValue = null)
 
     init {
         listenToUserDetails()
@@ -39,10 +40,10 @@ class UserViewModel(
     fun getUserPrefsDetails() = userPreferencesRepository.getUserDetails()
 
 
-    fun listenToUserDetails() = viewModelScope.launch {
+    private fun listenToUserDetails() = viewModelScope.launch {
         val userId = userPreferencesRepository.getUserId().first()
         if (userId.isEmpty()) return@launch
-        userFirestoreRepository.getUserDetails(userId).collect { resource ->
+        userFirestoreRepository.getUserDetails(userId).onEach { resource ->
             when (resource) {
                 is Resource.Success -> {
 
@@ -55,7 +56,8 @@ class UserViewModel(
                     // Do nothing
                 }
             }
-        }
+        }.stateIn(
+                viewModelScope, SharingStarted.Eagerly, initialValue = Resource.Loading())
     }
     suspend fun isUserLoggedIn() = appPreferencesRepository.isUserLoggedIn()
     suspend fun logout() {
