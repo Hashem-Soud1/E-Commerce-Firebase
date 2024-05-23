@@ -16,20 +16,19 @@ import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import com.example.e_commerce.R
-import com.example.e_commerce.data.datasource.datastore.UserPreferencesDataSource
-import com.example.e_commerce.data.repository.user.UserDataStoreRepositoryImpl
+import com.example.e_commerce.data.datasource.datastore.AppPreferenceDataStore
+import com.example.e_commerce.data.repository.common.AppDataStoreRepositoryImpl
 import com.example.e_commerce.ui.common.viewmodel.UserViewModel
 import com.example.e_commerce.ui.common.viewmodel.UserViewModelFactory
 import com.example.e_commerce.ui.auth.AuthActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import org.checkerframework.common.returnsreceiver.qual.This
 
 class MainActivity : AppCompatActivity() {
 
     private val userViewModel: UserViewModel by viewModels {
-        UserViewModelFactory(UserDataStoreRepositoryImpl(UserPreferencesDataSource(this)))
+        UserViewModelFactory(AppDataStoreRepositoryImpl(AppPreferenceDataStore(this)))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

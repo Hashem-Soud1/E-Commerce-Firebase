@@ -4,13 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
-import com.example.e_commerce.data.repository.user.UserDataStoreRepositoryImpl
-import com.example.e_commerce.data.repository.user.UserPreferenceRepository
+import com.example.e_commerce.data.repository.common.AppPreferenceRepository
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 
 class UserViewModel(
-    private val userPreferencesRepository: UserPreferenceRepository
+    private val userPreferencesRepository: AppPreferenceRepository
 ) : ViewModel() {
 
 
@@ -23,7 +22,7 @@ class UserViewModel(
 
 }
 
-class UserViewModelFactory(private val userPreferencesRepository: UserPreferenceRepository) :
+class UserViewModelFactory(private val userPreferencesRepository: AppPreferenceRepository) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
         if (modelClass.isAssignableFrom(UserViewModel::class.java)) {
