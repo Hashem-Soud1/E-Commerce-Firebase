@@ -42,7 +42,7 @@ import kotlinx.coroutines.tasks.await
          auth.signOut()
      }
 
-     private fun login(
+     private  suspend fun login(
             authProvider: AuthProvider,
         signInRequest: suspend () -> AuthResult
     ): Flow<Resource<UserDetailsModel>> = flow {
