@@ -20,6 +20,8 @@ import com.example.e_commerce.data.repository.user.UserPreferenceRepository
 import com.example.e_commerce.data.repository.user.UserPreferenceRepositoryImpl
 import com.example.e_commerce.ui.auth.viewmodel.LoginViewModel
 import com.example.e_commerce.utils.isValidEmail
+import io.reactivex.annotations.SchedulerSupport.IO
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -48,7 +50,7 @@ class LoginViewModel(
         email.isValidEmail() && password.length >= 6
     }
 
-    fun login() = viewModelScope.launch {
+    fun login() = viewModelScope.launch(Dispatchers.IO) {
         val email = email.value
         val password = password.value
         if (isLoginIsValid.first()) {
@@ -67,7 +69,7 @@ class LoginViewModel(
     }
 
     private fun handleLoginFlow(loginFlow: suspend () -> Flow<Resource<UserDetailsModel>>) =
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             loginFlow().onEach { resource ->
                 when (resource) {
                     is Resource.Success -> {
@@ -77,7 +79,7 @@ class LoginViewModel(
 
                     else -> _loginState.emit(resource)
                 }
-            }.launchIn(viewModelScope)
+            }.launchIn(viewModelScope).plus(Dispatchers.IO)
         }
 
 
