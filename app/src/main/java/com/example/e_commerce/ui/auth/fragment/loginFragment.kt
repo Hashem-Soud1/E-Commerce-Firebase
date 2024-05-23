@@ -14,12 +14,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.e_commerce.R
 import com.example.e_commerce.BuildConfig.clientServerId
-import com.example.e_commerce.data.datasource.datastore.AppPreferenceDataStore
 import com.example.e_commerce.data.models.Resource
-import com.example.e_commerce.data.repository.auth.FirebaseAuthRepositoryImpl
 
-import com.example.e_commerce.data.repository.common.AppDataStoreRepositoryImpl
-import com.example.e_commerce.data.repository.user.UserPreferenceRepositoryImpl
 import com.example.e_commerce.databinding.FragmentLoginBinding
 import com.example.e_commerce.ui.auth.viewmodel.LoginViewModel
 import com.example.e_commerce.ui.auth.viewmodel.LoginViewModelFactory

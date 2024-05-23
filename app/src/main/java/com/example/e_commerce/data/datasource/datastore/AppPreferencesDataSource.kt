@@ -5,7 +5,7 @@ import androidx.datastore.preferences.core.edit
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class AppPreferenceDataStore(private val context: Context) {
+class AppPreferencesDataSource(private val context: Context) {
 
     suspend fun saveLoginState(isLoggedIn: Boolean)  {
          context.appDataStore.edit { preferences ->

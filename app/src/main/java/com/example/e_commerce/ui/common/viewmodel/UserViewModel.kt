@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
-import com.example.e_commerce.data.datasource.datastore.AppPreferenceDataStore
+import com.example.e_commerce.data.datasource.datastore.AppPreferencesDataSource
 import com.example.e_commerce.data.models.Resource
 import com.example.e_commerce.data.models.user.toUserDetailsModel
 import com.example.e_commerce.data.models.user.toUserDetailsPreferences
@@ -68,7 +68,7 @@ class UserViewModel(
     }
     suspend fun isUserLoggedIn() = appPreferencesRepository.isUserLoggedIn()
     suspend fun logout() {
-        authRepository.logOut()
+        authRepository.logout()
         appPreferencesRepository.saveLoginState(false)
         userPreferencesRepository.clearUserPreferences()
     }
@@ -84,7 +84,7 @@ class UserViewModelFactory(
     private  val context: Context,
 ): ViewModelProvider.Factory {
     private val appPreferencesRepository =
-        AppDataStoreRepositoryImpl(AppPreferenceDataStore(context))
+        AppDataStoreRepositoryImpl(AppPreferencesDataSource(context))
 
     private val userPreferencesRepository = UserPreferenceRepositoryImpl(context)
     private val userFirestoreRepository = UserFirestoreRepositoryImp()

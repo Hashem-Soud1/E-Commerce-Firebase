@@ -1,75 +1,69 @@
 package com.example.e_commerce.data.repository.auth
 
 import com.example.e_commerce.data.models.Resource
+import com.example.e_commerce.data.models.user.UserDetailsModel
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 
-class FirebaseAuthRepositoryImpl(
-    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
-): FirebaseAuthRepository {
+ class FirebaseAuthRepositoryImpl(
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance(),
+    private val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
+) : FirebaseAuthRepository {
 
+    // Example usage for email and password login
     override suspend fun loginWithEmailAndPassword(
         email: String, password: String
-    ): Flow<Resource<String>> = flow {
+    ): Flow<Resource<UserDetailsModel>> {
+        return login { auth.signInWithEmailAndPassword(email, password).await() }
+    }
+
+    // Example usage for Google login
+    override suspend fun loginWithGoogle(idToken: String): Flow<Resource<UserDetailsModel>> {
+        return login {
+            val credential = GoogleAuthProvider.getCredential(idToken, null)
+            auth.signInWithCredential(credential).await()
+        }
+    }
+
+    // Example usage for Facebook login
+    override suspend fun loginWithFacebook(token: String): Flow<Resource<UserDetailsModel>> {
+        return login {
+            val credential = FacebookAuthProvider.getCredential(token)
+            auth.signInWithCredential(credential).await()
+        }
+    }
+
+     override suspend fun logout() {
+         auth.signOut()
+     }
+
+     private fun login(
+        signInRequest: suspend () -> AuthResult
+    ): Flow<Resource<UserDetailsModel>> = flow {
         try {
             emit(Resource.Loading())
-            // suspends the coroutine until the task is complete
-            val authResult = auth.signInWithEmailAndPassword(email, password).await()
-            authResult.user?.let { he ->
-                emit(Resource.Success(he.uid)) // Emit the result
+            val authResult = signInRequest() // Invoke the passed lambda action to perform login
+            val userId = authResult.user?.uid!!
+            val userDoc = firestore.collection("users").document(userId).get().await()
+            userDoc?.let {
+                val userDetails = it.toObject(UserDetailsModel::class.java)
+                emit(Resource.Success(userDetails!!))
             } ?: run {
                 emit(Resource.Error(Exception("User not found")))
             }
         } catch (e: Exception) {
-            emit(Resource.Error(e))
+            emit(Resource.Error(e)) // Emit error
         }
     }
 
-    override suspend fun loginWithGoogle(
-        idToken: String
-    ): Flow<Resource<String>> = flow {
-        try {
-             emit(Resource.Loading())
-            val credential = GoogleAuthProvider.getCredential(idToken, null)
-            val authResult = auth.signInWithCredential(credential).await()
 
-            authResult.user?.let {
-                  emit(Resource.Success(it.uid))
-
-            }?: run{
-                 emit(Resource.Error(Exception("User Not Found")))
-            }
-
-        }catch (e:Exception){
- emit(Resource.Error(e))
-        }
-
-
-    }
-
-    override suspend fun loginWithFacebook(idToken: String): Flow<Resource<String>> = flow {
-        try{
-            emit(Resource.Loading())
-         val credential=FacebookAuthProvider.getCredential(idToken)
-         val authResult=auth.signInWithCredential(credential).await()
-
-         authResult.user?.let {
-             emit(Resource.Loading())
-             emit(Resource.Success(it.uid))
-         }?:run{
-             emit(Resource.Error(Exception("User Not Found")))
-         }
-
-        }catch (e:Exception) {
-            emit(Resource.Error(e))
-        }
-    }
-
-    override suspend fun logOut() {
-        auth.signOut()
+    companion object {
+        private const val TAG = "FirebaseAuthRepositoryI"
     }
 }
