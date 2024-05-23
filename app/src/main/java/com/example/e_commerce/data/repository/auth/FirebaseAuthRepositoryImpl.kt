@@ -68,4 +68,8 @@ class FirebaseAuthRepositoryImpl(
             emit(Resource.Error(e))
         }
     }
+
+    override suspend fun logOut() {
+        auth.signOut()
+    }
 }
