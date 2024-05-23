@@ -3,27 +3,20 @@ package com.example.e_commerce.ui.home
 
 
 
-import android.animation.ObjectAnimator
 import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.view.animation.AnticipateInterpolator
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import com.example.e_commerce.R
-import com.example.e_commerce.data.datasource.datastore.AppPreferenceDataStore
-import com.example.e_commerce.data.repository.common.AppDataStoreRepositoryImpl
 import com.example.e_commerce.ui.common.viewmodel.UserViewModel
 import com.example.e_commerce.ui.common.viewmodel.UserViewModelFactory
 import com.example.e_commerce.ui.auth.AuthActivity
-import kotlinx.coroutines.Dispatchers
 
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -59,10 +52,10 @@ class MainActivity : AppCompatActivity() {
     private fun initViewModel() {
 
         lifecycleScope.launch {
-            val userDetails = runBlocking { userViewModel.getUserPrefsDetails().first() }
+            val userDetails = runBlocking { userViewModel.getUserDetails().first() }
             Log.d(TAG, "initViewModel: user details ${userDetails.email}")
 
-            userViewModel.userPrefsState.collect {
+            userViewModel.userDetailsState.collect {
                 Log.d(TAG, "initViewModel: user details updated ${it?.email}")
             }
 
