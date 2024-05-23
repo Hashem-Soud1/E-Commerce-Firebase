@@ -1,4 +1,4 @@
-package com.example.e_commerce.ui.common.model
+package com.example.e_commerce.data.models.user
 
 data class UserDetailsModel(
     val id: String,
