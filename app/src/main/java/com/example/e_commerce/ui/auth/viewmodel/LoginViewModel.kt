@@ -53,11 +53,11 @@ class LoginViewModel(
         }
     }
 
-    suspend fun loginWithGoogle(idToken: String) {
+     fun loginWithGoogle(idToken: String) {
         handleLoginFlow { authRepository.loginWithGoogle(idToken) }
     }
 
-    suspend fun loginWithFacebook(token: String) {
+     fun loginWithFacebook(token: String) {
         handleLoginFlow { authRepository.loginWithFacebook(token) }
     }
 

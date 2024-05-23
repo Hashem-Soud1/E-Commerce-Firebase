@@ -3,21 +3,11 @@ package com.example.e_commerce.ui.auth.fragment
 
 
 import android.content.Context
-import android.content.Intent
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
+
 import androidx.lifecycle.viewModelScope
-import com.example.e_commerce.R
-import com.example.e_commerce.BuildConfig.clientServerId
 import com.example.e_commerce.data.datasource.datastore.AppPreferencesDataSource
 import com.example.e_commerce.data.models.Resource
 import com.example.e_commerce.data.models.user.UserDetailsModel
@@ -28,25 +18,8 @@ import com.example.e_commerce.data.repository.common.AppDataStoreRepositoryImpl
 import com.example.e_commerce.data.repository.common.AppPreferenceRepository
 import com.example.e_commerce.data.repository.user.UserPreferenceRepository
 import com.example.e_commerce.data.repository.user.UserPreferenceRepositoryImpl
-
-import com.example.e_commerce.databinding.FragmentLoginBinding
 import com.example.e_commerce.ui.auth.viewmodel.LoginViewModel
-import com.example.e_commerce.ui.auth.viewmodel.LoginViewModelFactory
-import com.example.e_commerce.ui.common.model.ProgressDialog
-import com.example.e_commerce.ui.home.MainActivity
 import com.example.e_commerce.utils.isValidEmail
-import com.example.e_commerce.utils.showSnakeBarError
-import com.facebook.CallbackManager
-import com.facebook.FacebookCallback
-import com.facebook.FacebookException
-import com.facebook.login.LoginManager
-import com.facebook.login.LoginResult
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.tasks.Task
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -1,6 +1,7 @@
 package com.example.e_commerce.data.repository.auth
 
 import com.example.e_commerce.data.models.Resource
+import com.example.e_commerce.data.models.user.AuthProvider
 import com.example.e_commerce.data.models.user.UserDetailsModel
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FacebookAuthProvider
@@ -16,34 +17,33 @@ import kotlinx.coroutines.tasks.await
     private val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
 ) : FirebaseAuthRepository {
 
-    // Example usage for email and password login
-    override suspend fun loginWithEmailAndPassword(
-        email: String, password: String
-    ): Flow<Resource<UserDetailsModel>> {
-        return login { auth.signInWithEmailAndPassword(email, password).await() }
-    }
+     // Example usage for email and password login
+     override suspend fun loginWithEmailAndPassword(
+         email: String, password: String
+     ) = login(AuthProvider.EMAIL) { auth.signInWithEmailAndPassword(email, password).await() }
 
-    // Example usage for Google login
-    override suspend fun loginWithGoogle(idToken: String): Flow<Resource<UserDetailsModel>> {
-        return login {
-            val credential = GoogleAuthProvider.getCredential(idToken, null)
-            auth.signInWithCredential(credential).await()
-        }
-    }
 
-    // Example usage for Facebook login
-    override suspend fun loginWithFacebook(token: String): Flow<Resource<UserDetailsModel>> {
-        return login {
-            val credential = FacebookAuthProvider.getCredential(token)
-            auth.signInWithCredential(credential).await()
-        }
-    }
+     // Example usage for Google login
+     override suspend fun loginWithGoogle(idToken: String) = login(AuthProvider.GOOGLE) {
+             val credential = GoogleAuthProvider.getCredential(idToken, null)
+             auth.signInWithCredential(credential).await()
+         }
+
+
+     // Example usage for Facebook login
+     override suspend fun loginWithFacebook(token: String) = login(AuthProvider.FACEBOOK) {
+         val credential = FacebookAuthProvider.getCredential(token)
+         auth.signInWithCredential(credential).await()
+     }
+
+
 
      override suspend fun logout() {
          auth.signOut()
      }
 
      private fun login(
+            authProvider: AuthProvider,
         signInRequest: suspend () -> AuthResult
     ): Flow<Resource<UserDetailsModel>> = flow {
         try {
