@@ -63,7 +63,7 @@ class LoginViewModel(
 
     private fun handleLoginFlow(loginFlow: suspend () -> Flow<Resource<UserDetailsModel>>) =
         viewModelScope.launch {
-            loginFlow().onEach { resource ->
+            loginFlow().collect() { resource ->
                 when (resource) {
                     is Resource.Success -> {
                         savePreferenceData(resource.data!!)
@@ -72,7 +72,7 @@ class LoginViewModel(
 
                     else -> _loginState.emit(resource)
                 }
-            }.launchIn(viewModelScope)
+            }
         }
 
 
