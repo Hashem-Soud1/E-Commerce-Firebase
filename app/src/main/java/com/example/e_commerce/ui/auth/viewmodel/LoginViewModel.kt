@@ -15,6 +15,7 @@ import com.example.e_commerce.data.repository.user.UserPreferenceRepository
 import com.example.e_commerce.data.repository.user.UserPreferenceRepositoryImpl
 import com.example.e_commerce.domain.toUserDetailsPreferences
 import com.example.e_commerce.utils.isValidEmail
+import kotlinx.coroutines.Dispatchers
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -23,6 +24,8 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
@@ -60,8 +63,8 @@ class LoginViewModel(
     }
 
     private fun handleLoginFlow(loginFlow: suspend () -> Flow<Resource<UserDetailsModel>>) =
-        viewModelScope.launch {
-            loginFlow().collect() { resource ->
+        viewModelScope.launch(Dispatchers.IO) {
+            loginFlow().onEach { resource ->
                 when (resource) {
                     is Resource.Success -> {
                         savePreferenceData(resource.data!!)
@@ -70,7 +73,7 @@ class LoginViewModel(
 
                     else -> _loginState.emit(resource)
                 }
-            }
+            }.launchIn(viewModelScope).plus(Dispatchers.IO)
         }
 
 
