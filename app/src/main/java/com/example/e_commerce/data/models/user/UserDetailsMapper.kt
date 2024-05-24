@@ -13,6 +13,7 @@ fun UserDetailsModel.toUserDetailsPreferences(): UserDetailsPreferences {
     return UserDetailsPreferences.newBuilder()
         .setId(id)
         .setEmail(email)
+        .setName(name)
         .addAllReviews(reviews?.toList()?: emptyList())
         .build()
 }
