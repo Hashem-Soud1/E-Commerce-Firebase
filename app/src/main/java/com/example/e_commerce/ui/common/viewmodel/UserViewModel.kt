@@ -19,6 +19,7 @@ import com.example.e_commerce.data.repository.user.UserPreferenceRepository
 import com.example.e_commerce.data.repository.user.UserPreferenceRepositoryImpl
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.mapLatest
@@ -33,6 +34,8 @@ class UserViewModel(
     private val authRepository: FirebaseAuthRepository
 ) : ViewModel() {
 
+
+    var logoutState=MutableSharedFlow<Resource<Unit>>()
     // load user data in state flow inside view model  scope
     val userDetailsState = getUserDetails()
         .stateIn(viewModelScope, started = SharingStarted.Eagerly, initialValue = null)
@@ -68,9 +71,11 @@ class UserViewModel(
     }
     suspend fun isUserLoggedIn() = appPreferencesRepository.isUserLoggedIn()
     suspend fun logout() {
+        logoutState.emit(Resource.Loading())
         authRepository.logout()
         appPreferencesRepository.saveLoginState(false)
         userPreferencesRepository.clearUserPreferences()
+        logoutState.emit(Resource.Success(Unit))
     }
     fun setIsLoggedIn(b: Boolean) {
         viewModelScope.launch(IO) {
