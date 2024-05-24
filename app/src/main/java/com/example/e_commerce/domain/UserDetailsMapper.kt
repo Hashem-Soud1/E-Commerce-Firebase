@@ -1,4 +1,7 @@
-package com.example.e_commerce.data.models.user
+package com.example.e_commerce.domain
+
+import com.example.e_commerce.data.models.user.UserDetailsModel
+import com.example.e_commerce.data.models.user.UserDetailsPreferences
 
 fun UserDetailsPreferences.toUserDetailsModel(): UserDetailsModel {
     return UserDetailsModel(
