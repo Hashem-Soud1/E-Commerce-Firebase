@@ -7,8 +7,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.e_commerce.data.datasource.datastore.AppPreferencesDataSource
 import com.example.e_commerce.data.models.Resource
-import com.example.e_commerce.data.models.user.toUserDetailsModel
-import com.example.e_commerce.data.models.user.toUserDetailsPreferences
+
 import com.example.e_commerce.data.repository.auth.FirebaseAuthRepository
 import com.example.e_commerce.data.repository.auth.FirebaseAuthRepositoryImpl
 import com.example.e_commerce.data.repository.common.AppDataStoreRepositoryImpl
@@ -17,6 +16,8 @@ import com.example.e_commerce.data.repository.user.UserFirestoreRepository
 import com.example.e_commerce.data.repository.user.UserFirestoreRepositoryImp
 import com.example.e_commerce.data.repository.user.UserPreferenceRepository
 import com.example.e_commerce.data.repository.user.UserPreferenceRepositoryImpl
+import com.example.e_commerce.domain.toUserDetailsModel
+import com.example.e_commerce.domain.toUserDetailsPreferences
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
