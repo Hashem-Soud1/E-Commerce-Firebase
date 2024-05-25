@@ -43,11 +43,11 @@ import kotlinx.coroutines.tasks.await
      }
 
      private  suspend fun login(
-            authProvider: AuthProvider,
+        authProvider: AuthProvider,
         signInRequest: suspend () -> AuthResult
     ): Flow<Resource<UserDetailsModel>> = flow {
         try {
-            emit(Resource.Loading())
+           // emit(Resource.Loading())
             val authResult = signInRequest() // Invoke the passed lambda action to perform login
             val userId = authResult.user?.uid!!
             val userDoc = firestore.collection("users").document(userId).get().await()

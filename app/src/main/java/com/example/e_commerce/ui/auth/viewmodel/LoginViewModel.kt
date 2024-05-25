@@ -63,9 +63,10 @@ class LoginViewModel(
     }
 
     //call : higher function
-    private fun handleLoginFlow(loginFlow: suspend () -> Flow<Resource<UserDetailsModel>>) =
-        viewModelScope.launch(Dispatchers.IO) {
-            loginFlow().onEach { resource ->
+    private fun handleLoginFlow(loginFlow: suspend () -> Flow<Resource<UserDetailsModel>>)
+
+    = viewModelScope.launch(Dispatchers.IO) {
+            loginFlow().collect { resource ->
                 when (resource) {
                     is Resource.Success -> {
                         savePreferenceData(resource.data!!)
@@ -74,7 +75,7 @@ class LoginViewModel(
 
                     else -> _loginState.emit(resource)
                 }
-            }.launchIn(viewModelScope).plus(Dispatchers.IO)
+            }
         }
 
 
