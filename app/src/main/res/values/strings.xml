@@ -21,5 +21,14 @@
     <string name="google_sign_in_field_msg" translatable="false">Google sign in failed, please retry again later.</string>
     <string name="facebook_sign_in_field_msg" translatable="false">facebook sign in failed, please retry again later.</string>
     <string name="generic_err_msg" translatable="false">Error please try again later.</string>
+    <string name="register_welcome_msg" translatable="false">Let’s Get Started</string>
+    <string name="sign_up_msg" translatable="false">Create a new account</string>
+    <string name="name_et_hint" translatable="false">Full Name</string>
+    <string name="password_again_et_hint" translatable="false">Password Again</string>
+    <string name="sign_up" translatable="false">Sign Up</string>
+    <string name="have_an_account_msg" translatable="false">have an account?</string>
+    <string name="google_signup_btn_msg" translatable="false">Sign up with Google</string>
+    <string name="facebook_signup_btn_msg" translatable="false">Sign up with facebook</string>
+
 
 </resources>
