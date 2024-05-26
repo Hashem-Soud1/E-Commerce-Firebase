@@ -14,6 +14,7 @@ import com.example.e_commerce.data.repository.common.AppPreferenceRepository
 import com.example.e_commerce.data.repository.user.UserPreferenceRepository
 import com.example.e_commerce.data.repository.user.UserPreferenceRepositoryImpl
 import com.example.e_commerce.utils.isValidEmail
+import io.reactivex.annotations.SchedulerSupport.IO
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,8 +30,8 @@ class RegisterViewModel(
     private val authRepository: FirebaseAuthRepository
 ) : ViewModel() {
 
-    private val _registerState = MutableSharedFlow<Resource<String>>()
-    val registerState: SharedFlow<Resource<String>> = _registerState.asSharedFlow()
+    private val _registerState = MutableSharedFlow<Resource<UserDetailsModel>>()
+    val registerState: SharedFlow<Resource<UserDetailsModel>> = _registerState.asSharedFlow()
 
     val name = MutableStateFlow("")
     val email = MutableStateFlow("")
@@ -49,11 +50,23 @@ class RegisterViewModel(
         val password = password.value
         if (isRegisterIsValid.first()) {
             // handle register flow
-//            authRepository.registerWithEmailAndPassword(name, email, password).collect {
-//                _registerState.emit(it)
-//            }
+            authRepository.registerWithEmailAndPassword(name, email, password).collect {
+                _registerState.emit(it)
+            }
         } else {
             // emit error
+        }
+    }
+
+    fun signUpWithGoogle(idToken: String) = viewModelScope.launch {
+        authRepository.registerWithGoogle(idToken).collect {
+            _registerState.emit(it)
+        }
+    }
+
+    fun registerWithFacebook(token: String) = viewModelScope.launch {
+        authRepository.registerWithFacebook(token).collect {
+            _registerState.emit(it)
         }
     }
 }
@@ -79,3 +92,4 @@ class RegisterViewModelFactory(
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
+

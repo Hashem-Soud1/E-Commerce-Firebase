@@ -3,6 +3,8 @@ package com.example.e_commerce.data.repository.auth
 import com.example.e_commerce.data.models.Resource
 import com.example.e_commerce.data.models.user.AuthProvider
 import com.example.e_commerce.data.models.user.UserDetailsModel
+import com.example.e_commerce.utils.CrashlyticsUtils
+import com.example.e_commerce.utils.LoginException
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
@@ -47,7 +49,7 @@ import kotlinx.coroutines.tasks.await
         signInRequest: suspend () -> AuthResult
     ): Flow<Resource<UserDetailsModel>> = flow {
         try {
-           // emit(Resource.Loading())
+            emit(Resource.Loading())
             val authResult = signInRequest() // Invoke the passed lambda action to perform login
             val userId = authResult.user?.uid!!
             val userDoc = firestore.collection("users").document(userId).get().await()
@@ -62,8 +64,124 @@ import kotlinx.coroutines.tasks.await
         }
     }
 
+     override suspend fun registerWithGoogle(idToken: String): Flow<Resource<UserDetailsModel>> {
+         return flow {
+             try {
+                 emit(Resource.Loading())
+                 // perform firebase auth sign up request
+                 val credential = GoogleAuthProvider.getCredential(idToken, null)
+                 val authResult = auth.signInWithCredential(credential).await()
+                 val userId = authResult.user?.uid
 
-    companion object {
+                 if (userId == null) {
+                     val msg = "Sign up UserID not found"
+                     logAuthIssueToCrashlytics(msg, AuthProvider.GOOGLE.name)
+                     emit(Resource.Error(Exception(msg)))
+                     return@flow
+                 }
+
+                 // create user details object
+                 val userDetails = UserDetailsModel(
+                     id = userId,
+                     name = authResult.user?.displayName ?: "",
+                     email = authResult.user?.email ?: "",
+                     createdAt = System.currentTimeMillis()
+                 )
+                 // save user details to firestore
+                 firestore.collection("users").document(userId).set(userDetails).await()
+                 emit(Resource.Success(userDetails))
+             } catch (e: Exception) {
+                 logAuthIssueToCrashlytics(
+                     e.message ?: "Unknown error from exception = ${e::class.java}",
+                     AuthProvider.GOOGLE.name
+                 )
+                 emit(Resource.Error(e)) // Emit error
+             }
+         }
+     }
+
+     override suspend fun registerWithFacebook(token: String): Flow<Resource<UserDetailsModel>> {
+         return flow {
+             try {
+                 emit(Resource.Loading())
+                 // perform firebase auth sign up request
+                 val credential = FacebookAuthProvider.getCredential(token)
+                 val authResult = auth.signInWithCredential(credential).await()
+                 val userId = authResult.user?.uid
+
+                 if (userId == null) {
+                     val msg = "Sign up UserID not found"
+                     logAuthIssueToCrashlytics(msg, AuthProvider.FACEBOOK.name)
+                     emit(Resource.Error(Exception(msg)))
+                     return@flow
+                 }
+
+                 // create user details object
+                 val userDetails = UserDetailsModel(
+                     id = userId,
+                     name = authResult.user?.displayName ?: "",
+                     email = authResult.user?.email ?: "",
+                     createdAt = System.currentTimeMillis()
+                 )
+                 // save user details to firestore
+                 firestore.collection("users").document(userId).set(userDetails).await()
+                 emit(Resource.Success(userDetails))
+             } catch (e: Exception) {
+                 logAuthIssueToCrashlytics(
+                     e.message ?: "Unknown error from exception = ${e::class.java}",
+                     AuthProvider.FACEBOOK.name
+                 )
+                 emit(Resource.Error(e)) // Emit error
+             }
+         }
+     }
+
+     override suspend fun registerWithEmailAndPassword(
+         name: String, email: String, password: String
+     ): Flow<Resource<UserDetailsModel>> {
+
+         return flow {
+             try {
+                 emit(Resource.Loading())
+                 // perform firebase auth sign up request
+                 val authResult = auth.createUserWithEmailAndPassword(email, password).await()
+                 val userId = authResult.user?.uid
+
+                 if (userId == null) {
+                     val msg = "Sign up UserID not found"
+                     logAuthIssueToCrashlytics(msg, AuthProvider.EMAIL.name)
+                     emit(Resource.Error(Exception(msg)))
+                     return@flow
+                 }
+
+                 // create user details object
+                 val userDetails = UserDetailsModel(
+                     id = userId, name = name, email = email, createdAt = System.currentTimeMillis()
+                 )
+                 // save user details to firestore
+                 firestore.collection("users").document(userId).set(userDetails).await()
+                 authResult?.user?.sendEmailVerification()?.await()
+                 emit(Resource.Success(userDetails))
+             } catch (e: Exception) {
+                 logAuthIssueToCrashlytics(
+                     e.message ?: "Unknown error from exception = ${e::class.java}",
+                     AuthProvider.EMAIL.name
+                 )
+                 emit(Resource.Error(e)) // Emit error
+             }
+         }
+     }
+
+     private fun logAuthIssueToCrashlytics(msg: String, provider: String) {
+         CrashlyticsUtils.sendCustomLogToCrashlytics<LoginException>(
+             msg,
+             CrashlyticsUtils.LOGIN_KEY to msg,
+             CrashlyticsUtils.LOGIN_PROVIDER to provider,
+         )
+     }
+
+
+     companion object {
         private const val TAG = "FirebaseAuthRepositoryI"
     }
 }

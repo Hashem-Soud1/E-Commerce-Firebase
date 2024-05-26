@@ -8,9 +8,9 @@ import kotlinx.parcelize.Parcelize
 @Keep
 @Parcelize
 data class UserDetailsModel(
-  @get:PropertyName("created-at")
+    @get:PropertyName("created-at")
   @set:PropertyName("created-at")
-    var createdAt: Int? = null,
+    var createdAt: Long? = null,
     var id: String? = null,
     var email: String? = null,
     var name: String? = null,

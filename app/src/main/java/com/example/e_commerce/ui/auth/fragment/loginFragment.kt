@@ -19,6 +19,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.Navigation
 import com.example.e_commerce.BuildConfig
 import com.example.e_commerce.R
 import com.example.e_commerce.data.datasource.datastore.AppPreferencesDataSource
@@ -132,6 +133,9 @@ class LoginFragment : Fragment() {
         binding.facebookSigninBtn.setOnClickListener {
             loginWithFacebook()
         }
+        binding.registerTv.setOnClickListener(
+            Navigation.createNavigateOnClickListener(R.id.action_loginFragment_to_registerFragment))
+
     }
 
     // ActivityResultLauncher for the sign-in intent

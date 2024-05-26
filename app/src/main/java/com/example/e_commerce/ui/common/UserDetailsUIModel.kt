@@ -10,7 +10,7 @@ import java.util.Locale
 @Keep
 @Parcelize
 data class UserDetailsUIModel(
-    var createdAt: Int? = null,
+    var createdAt: Long? = null,
     var id: String? = null,
     var email: String? = null,
     var name: String? = null,
