@@ -156,13 +156,8 @@ class RegisterFragment : Fragment() {
     }
 
     private fun registerWithGoogleRequest() {
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(BuildConfig.clientServerId).requestEmail().requestProfile()
-            .requestServerAuthCode(BuildConfig.clientServerId).build()
 
-        val googleSignInClient: GoogleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
-        googleSignInClient.signOut()
-        val signInIntent = googleSignInClient.signInIntent
+        val signInIntent = getGoogleRequestIntent(requireActivity())
         launcher.launch(signInIntent)
     }
 
