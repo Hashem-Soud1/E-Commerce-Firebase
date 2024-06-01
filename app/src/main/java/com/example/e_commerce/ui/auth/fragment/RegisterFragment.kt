@@ -13,10 +13,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.example.e_commerce.BuildConfig
 import com.example.e_commerce.R
 import com.example.e_commerce.data.models.Resource
 import com.example.e_commerce.databinding.FragmentRegisterBinding
+import com.example.e_commerce.ui.auth.getGoogleRequestIntent
 import com.example.e_commerce.ui.auth.viewmodel.RegisterViewModel
 import com.example.e_commerce.ui.auth.viewmodel.RegisterViewModelFactory
 import com.example.e_commerce.ui.common.model.ProgressDialog
@@ -31,8 +31,6 @@ import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -197,6 +195,12 @@ class RegisterFragment : Fragment() {
                 findNavController().popBackStack()
             }.create().show()
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
 
     companion object {
         private const val TAG = "RegisterFragment"

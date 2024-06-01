@@ -2,7 +2,6 @@ package com.example.e_commerce.ui.auth.fragment
 
 
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -14,30 +13,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.Navigation
-import com.example.e_commerce.BuildConfig
+import androidx.navigation.fragment.findNavController
 import com.example.e_commerce.R
-import com.example.e_commerce.data.datasource.datastore.AppPreferencesDataSource
 import com.example.e_commerce.data.models.Resource
-import com.example.e_commerce.data.models.user.UserDetailsModel
-import com.example.e_commerce.data.repository.auth.FirebaseAuthRepository
-import com.example.e_commerce.data.repository.auth.FirebaseAuthRepositoryImpl
-import com.example.e_commerce.data.repository.common.AppDataStoreRepositoryImpl
-import com.example.e_commerce.data.repository.common.AppPreferenceRepository
-import com.example.e_commerce.data.repository.user.UserPreferenceRepository
-import com.example.e_commerce.data.repository.user.UserPreferenceRepositoryImpl
 import com.example.e_commerce.databinding.FragmentLoginBinding
-import com.example.e_commerce.domain.toUserDetailsPreferences
+import com.example.e_commerce.ui.auth.getGoogleRequestIntent
 import com.example.e_commerce.ui.auth.viewmodel.LoginViewModel
 import com.example.e_commerce.ui.auth.viewmodel.LoginViewModelFactory
 import com.example.e_commerce.ui.common.model.ProgressDialog
 import com.example.e_commerce.ui.home.MainActivity
-import com.example.e_commerce.utils.isValidEmail
 import com.example.e_commerce.utils.showSnakeBarError
 import com.facebook.AccessToken
 import com.facebook.CallbackManager
@@ -47,21 +34,8 @@ import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import io.reactivex.annotations.SchedulerSupport.IO
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 
@@ -133,8 +107,13 @@ class LoginFragment : Fragment() {
         binding.facebookSigninBtn.setOnClickListener {
             loginWithFacebook()
         }
-        binding.registerTv.setOnClickListener(
-            Navigation.createNavigateOnClickListener(R.id.action_loginFragment_to_registerFragment))
+        binding.registerTv.setOnClickListener {
+            findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
+        }
+        binding.forgotPasswordTv.setOnClickListener {
+            val forgetPasswordFragment = ForgetPasswordFragment()
+            forgetPasswordFragment.show(parentFragmentManager, "forget-password")
+        }
 
     }
 
