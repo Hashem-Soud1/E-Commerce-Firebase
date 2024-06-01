@@ -1,4 +1,4 @@
-package com.example.e_commerce.ui.auth.fragment
+package com.example.e_commerce.ui.auth
 
 import android.app.Activity
 import android.content.Intent
