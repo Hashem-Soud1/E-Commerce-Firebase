@@ -16,11 +16,13 @@ import androidx.navigation.fragment.findNavController
 import com.example.e_commerce.R
 import com.example.e_commerce.data.models.Resource
 import com.example.e_commerce.databinding.FragmentLoginBinding
-import com.example.e_commerce.ui.auth.fragments.BaseFragment
+import com.example.e_commerce.ui.common.fragments.BaseFragment
 import com.example.e_commerce.ui.auth.getGoogleRequestIntent
 import com.example.e_commerce.ui.auth.viewmodel.LoginViewModel
 import com.example.e_commerce.ui.auth.viewmodel.LoginViewModelFactory
 import com.example.e_commerce.ui.home.MainActivity
+import com.example.e_commerce.utils.CrashlyticsUtils
+import com.example.e_commerce.utils.LoginException
 import com.example.e_commerce.utils.showSnakeBarError
 import com.facebook.AccessToken
 import com.facebook.CallbackManager
@@ -35,22 +37,24 @@ import com.google.android.gms.tasks.Task
 import kotlinx.coroutines.launch
 
 
-class LoginFragment :BaseFragment<FragmentLoginBinding,LoginViewModel>() {
+class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
 
     private val callbackManager: CallbackManager by lazy { CallbackManager.Factory.create() }
     private val loginManager: LoginManager by lazy { LoginManager.getInstance() }
-
 
     override val viewModel: LoginViewModel by viewModels {
         LoginViewModelFactory(contextValue = requireContext())
     }
 
-    override fun getLayoutResId()=R.layout.fragment_login
+    override fun getLayoutResId(): Int = R.layout.fragment_login
 
-    override  fun init() {
-       initListeners()
-       initViewModel()
-   }
+    override fun init() {
+
+        initListeners()
+        initViewModel()
+
+
+    }
 
     private fun initViewModel() {
         lifecycleScope.launch {
@@ -68,7 +72,7 @@ class LoginFragment :BaseFragment<FragmentLoginBinding,LoginViewModel>() {
                     is Resource.Error -> {
                         progressDialog.dismiss()
                         val msg = resource.exception?.message ?: getString(R.string.generic_err_msg)
-                        Log.d(TAG, "initViewModelError: $msg")
+                     //   Log.d(TAG, "initViewModelError: $msg")
                         view?.showSnakeBarError(msg)
                     }
                 }
@@ -84,18 +88,21 @@ class LoginFragment :BaseFragment<FragmentLoginBinding,LoginViewModel>() {
     }
 
     private fun initListeners() {
+        binding.loginBtn.setOnClickListener {
+            viewModel.loginWithEmailAndPassword()
+        }
         binding.googleSigninBtn.setOnClickListener {
             loginWithGoogleRequest()
         }
         binding.facebookSigninBtn.setOnClickListener {
             loginWithFacebook()
         }
-        binding.registerTv.setOnClickListener {
-            findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
-        }
         binding.forgotPasswordTv.setOnClickListener {
             val forgetPasswordFragment = ForgetPasswordFragment()
             forgetPasswordFragment.show(parentFragmentManager, "forget-password")
+        }
+        binding.registerTv.setOnClickListener {
+            findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }
 
     }
@@ -112,7 +119,6 @@ class LoginFragment :BaseFragment<FragmentLoginBinding,LoginViewModel>() {
         }
 
     private fun loginWithGoogleRequest() {
-
         val signInIntent = getGoogleRequestIntent(requireActivity())
         launcher.launch(signInIntent)
     }
@@ -123,10 +129,18 @@ class LoginFragment :BaseFragment<FragmentLoginBinding,LoginViewModel>() {
             firebaseAuthWithGoogle(account.idToken!!)
         } catch (e: Exception) {
             view?.showSnakeBarError(e.message ?: getString(R.string.generic_err_msg))
-   }
+            val msg = e.message ?: getString(R.string.generic_err_msg)
+            logAuthIssueToCrashlytics(msg, "Google")
+        }
     }
 
-
+    private fun logAuthIssueToCrashlytics(msg: String, provider: String) {
+        CrashlyticsUtils.sendCustomLogToCrashlytics<LoginException>(
+            msg,
+            CrashlyticsUtils.LOGIN_KEY to msg,
+            CrashlyticsUtils.LOGIN_PROVIDER to provider,
+        )
+    }
 
     private fun firebaseAuthWithGoogle(idToken: String) {
         viewModel.loginWithGoogle(idToken)
@@ -147,7 +161,7 @@ class LoginFragment :BaseFragment<FragmentLoginBinding,LoginViewModel>() {
         loginManager.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
             override fun onSuccess(result: LoginResult) {
                 val token = result.accessToken.token
-                Log.d(TAG, "onSuccess: $token")
+          //      Log.d(TAG, "onSuccess: $token")
                 firebaseAuthWithFacebook(token)
             }
 
@@ -158,7 +172,9 @@ class LoginFragment :BaseFragment<FragmentLoginBinding,LoginViewModel>() {
             override fun onError(error: FacebookException) {
                 // Handle login error
                 val msg = error.message ?: getString(R.string.generic_err_msg)
+            //    Log.d(TAG, "onError: $msg")
                 view?.showSnakeBarError(msg)
+                logAuthIssueToCrashlytics(msg, "Facebook")
             }
         })
 
@@ -171,11 +187,8 @@ class LoginFragment :BaseFragment<FragmentLoginBinding,LoginViewModel>() {
         viewModel.loginWithFacebook(token)
     }
 
-
-
     companion object {
 
         private const val TAG = "LoginFragment"
     }
 }
-

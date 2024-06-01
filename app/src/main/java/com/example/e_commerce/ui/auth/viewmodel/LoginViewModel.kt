@@ -1,6 +1,7 @@
 package com.example.e_commerce.ui.auth.viewmodel
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -47,6 +48,7 @@ class LoginViewModel(
     fun loginWithEmailAndPassword() = viewModelScope.launch {
         val email = email.value
         val password = password.value
+
         if (isLoginIsValid.first()) {
             handleLoginFlow { authRepository.loginWithEmailAndPassword(email, password) }
         } else {
@@ -56,7 +58,7 @@ class LoginViewModel(
 
      fun loginWithGoogle(idToken: String) {
         handleLoginFlow { authRepository.loginWithGoogle(idToken) }
-    }
+     }
 
      fun loginWithFacebook(token: String) {
         handleLoginFlow { authRepository.loginWithFacebook(token) }

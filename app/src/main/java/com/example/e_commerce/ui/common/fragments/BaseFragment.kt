@@ -1,4 +1,4 @@
-package com.example.e_commerce.ui.auth.fragments
+package com.example.e_commerce.ui.common.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,16 +14,14 @@ import com.example.e_commerce.BR
 
 
 
-abstract class BaseFragment<DB:ViewDataBinding,VM:ViewModel> : Fragment() {
 
-
-
-    protected var _binding: DB? = null
-    protected val binding get() = _binding!!
-
-    protected abstract val viewModel: VM
+abstract class BaseFragment<DB : ViewDataBinding, VM : ViewModel> : Fragment() {
 
     val progressDialog by lazy { ProgressDialog.createProgressDialog(requireActivity()) }
+
+    protected abstract val viewModel: VM
+    private var _binding: DB? = null
+    protected val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -32,24 +30,29 @@ abstract class BaseFragment<DB:ViewDataBinding,VM:ViewModel> : Fragment() {
         return binding.root
     }
 
-
+    /**
+     * Get layout resource id which inflate in onCreateView.
+     */
     @LayoutRes
     abstract fun getLayoutResId(): Int
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         doDataBinding()
+        init()
     }
 
-
+    /**
+     * Do your other stuff in init after binding layout.
+     */
     abstract fun init()
 
     private fun doDataBinding() {
         // it is extra if you want to set life cycle owner in binding
         binding.lifecycleOwner = viewLifecycleOwner
         // Here your viewModel and binding variable implementation
-        binding.setVariable(
-            BR.viewmodel, viewModel
+       binding.setVariable(
+           BR.viewModel, viewModel
         )  // In all layout the variable name should be "viewModel"
         binding.executePendingBindings()
     }
@@ -60,4 +63,5 @@ abstract class BaseFragment<DB:ViewDataBinding,VM:ViewModel> : Fragment() {
     }
 
 }
+
 
