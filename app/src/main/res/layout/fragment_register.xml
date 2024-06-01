@@ -4,7 +4,7 @@
     <data>
 
         <variable
-            name="viewmodel"
+            name="viewModel"
             type="com.example.e_commerce.ui.auth.viewmodel.RegisterViewModel" />
     </data>
 
@@ -51,7 +51,7 @@
                 android:drawableStart="@drawable/ic_name"
                 android:hint="@string/name_et_hint"
                 android:inputType="textEmailAddress"
-                android:text="@={viewmodel.name}" />
+                android:text="@={viewModel.name}" />
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/email_et"
@@ -62,7 +62,7 @@
                 android:drawableStart="@drawable/ic_email"
                 android:hint="@string/email_et_hint"
                 android:inputType="textEmailAddress"
-                android:text="@={viewmodel.email}" />
+                android:text="@={viewModel.email}" />
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/password_et"
@@ -73,7 +73,7 @@
                 android:drawableStart="@drawable/ic_password"
                 android:hint="@string/password_et_hint"
                 android:inputType="textPassword"
-                android:text="@={viewmodel.password}" />
+                android:text="@={viewModel.password}" />
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/confirm_password_et"
@@ -84,13 +84,13 @@
                 android:drawableStart="@drawable/ic_password"
                 android:hint="@string/password_again_et_hint"
                 android:inputType="textPassword"
-                android:text="@={viewmodel.confirmPassword}" />
+                android:text="@={viewModel.confirmPassword}" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/login_btn"
                 style="@style/PrimaryButtonStyle"
                 android:layout_marginTop="16dp"
-                android:onClickListener="@{() -> viewmodel.registerWithEmailAndPassword()}"
+                android:onClickListener="@{() -> viewModel.registerWithEmailAndPassword()}"
                 android:text="@string/sign_up" />
 
             <RelativeLayout
