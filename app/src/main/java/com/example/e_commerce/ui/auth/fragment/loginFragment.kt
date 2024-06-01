@@ -3,27 +3,23 @@ package com.example.e_commerce.ui.auth.fragment
 
 
 import android.content.Intent
-import android.os.Bundle
+
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 
 import androidx.lifecycle.lifecycleScope
 
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.example.e_commerce.R
 import com.example.e_commerce.data.models.Resource
 import com.example.e_commerce.databinding.FragmentLoginBinding
+import com.example.e_commerce.ui.auth.fragments.BaseFragment
 import com.example.e_commerce.ui.auth.getGoogleRequestIntent
 import com.example.e_commerce.ui.auth.viewmodel.LoginViewModel
 import com.example.e_commerce.ui.auth.viewmodel.LoginViewModelFactory
-import com.example.e_commerce.ui.common.model.ProgressDialog
 import com.example.e_commerce.ui.home.MainActivity
 import com.example.e_commerce.utils.showSnakeBarError
 import com.facebook.AccessToken
@@ -39,39 +35,26 @@ import com.google.android.gms.tasks.Task
 import kotlinx.coroutines.launch
 
 
-class LoginFragment : Fragment() {
+class LoginFragment :BaseFragment<FragmentLoginBinding,LoginViewModel>() {
+
     private val callbackManager: CallbackManager by lazy { CallbackManager.Factory.create() }
     private val loginManager: LoginManager by lazy { LoginManager.getInstance() }
 
-    private val progressDialog by lazy { ProgressDialog.createProgressDialog(requireActivity()) }
 
-    private val loginViewModel: LoginViewModel by viewModels {
+    override val viewModel: LoginViewModel by viewModels {
         LoginViewModelFactory(contextValue = requireContext())
     }
 
-    private var _binding: FragmentLoginBinding? = null
-    private val binding get() = _binding!!
+    override fun getLayoutResId()=R.layout.fragment_login
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentLoginBinding.inflate(inflater, container, false)
-        binding.lifecycleOwner = viewLifecycleOwner
-        binding.viewmodel = loginViewModel
-        // Inflate the layout for this fragment
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        initListeners()
-        initViewModel()
-    }
+    override  fun init() {
+       initListeners()
+       initViewModel()
+   }
 
     private fun initViewModel() {
         lifecycleScope.launch {
-            loginViewModel.loginState.collect { resource ->
+            viewModel.loginState.collect { resource ->
                 when (resource) {
                     is Resource.Loading -> {
                         progressDialog.show()
@@ -140,21 +123,13 @@ class LoginFragment : Fragment() {
             firebaseAuthWithGoogle(account.idToken!!)
         } catch (e: Exception) {
             view?.showSnakeBarError(e.message ?: getString(R.string.generic_err_msg))
-//            val msg = e.message ?: getString(R.string.generic_err_msg)
-//            logAuthIssueToCrashlytics(msg, "Google")
-       }
+   }
     }
 
-//    private fun logAuthIssueToCrashlytics(msg: String, provider: String) {
-//        CrashlyticsUtils.sendCustomLogToCrashlytics<LoginException>(
-//            msg,
-//            CrashlyticsUtils.LOGIN_KEY to msg,
-//            CrashlyticsUtils.LOGIN_PROVIDER to provider,
-//        )
-//    }
+
 
     private fun firebaseAuthWithGoogle(idToken: String) {
-        loginViewModel.loginWithGoogle(idToken)
+        viewModel.loginWithGoogle(idToken)
     }
 
     private fun signOut() {
@@ -183,9 +158,7 @@ class LoginFragment : Fragment() {
             override fun onError(error: FacebookException) {
                 // Handle login error
                 val msg = error.message ?: getString(R.string.generic_err_msg)
-                Log.d(TAG, "onError: $msg")
                 view?.showSnakeBarError(msg)
-       //         logAuthIssueToCrashlytics(msg, "Facebook")
             }
         })
 
@@ -195,18 +168,10 @@ class LoginFragment : Fragment() {
     }
 
     private fun firebaseAuthWithFacebook(token: String) {
-        loginViewModel.loginWithFacebook(token)
+        viewModel.loginWithFacebook(token)
     }
 
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        callbackManager.onActivityResult(requestCode, resultCode, data)
-//    }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
 
     companion object {
 
