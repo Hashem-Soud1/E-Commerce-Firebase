@@ -61,11 +61,12 @@ class LoginViewModel(
      }
 
      fun loginWithFacebook(token: String) {
+
         handleLoginFlow { authRepository.loginWithFacebook(token) }
     }
 
     //call : higher function
-    private fun handleLoginFlow(loginFlow: suspend () -> Flow<Resource<UserDetailsModel>>)
+    private fun handleLoginFlow( loginFlow: suspend () -> Flow<Resource<UserDetailsModel>>)
 
     = viewModelScope.launch(Dispatchers.IO) {
             loginFlow().collect { resource ->

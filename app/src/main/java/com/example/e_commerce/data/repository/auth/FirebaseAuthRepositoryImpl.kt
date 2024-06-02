@@ -33,16 +33,15 @@ import kotlinx.coroutines.tasks.await
 
 
      // Example usage for Facebook login
-     override suspend fun loginWithFacebook(token: String) = login(AuthProvider.FACEBOOK) {
+     override suspend fun loginWithFacebook(token: String)
+     = login(
+         AuthProvider.FACEBOOK,
+         signInRequest =  {
          val credential = FacebookAuthProvider.getCredential(token)
          auth.signInWithCredential(credential).await()
-     }
+     } )
 
 
-
-     override suspend fun logout() {
-         auth.signOut()
-     }
 
      private  suspend fun login(
         authProvider: AuthProvider,
@@ -63,6 +62,10 @@ import kotlinx.coroutines.tasks.await
             emit(Resource.Error(e)) // Emit error
         }
     }
+
+     override suspend fun logout() {
+         auth.signOut()
+     }
 
      override suspend fun registerWithGoogle(idToken: String): Flow<Resource<UserDetailsModel>> {
          return flow {
