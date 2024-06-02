@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">E-Commerce</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+    <string name="auth_welcome_msg" translatable="false">Welcome my App</string>
+    <string name="sign_in_msg" translatable="false">Sign in to continue</string>
+    <string name="email_et_hint" translatable="false">Your Email</string>
+    <string name="password_et_hint" translatable="false">Password</string>
+    <string name="sign_in" translatable="false">Sign in</string>
+    <string name="or" translatable="false">Or</string>
+    <string name="google_signin_btn_msg" translatable="false">Login with Google</string>
+    <string name="facebook_signin_btn_msg" translatable="false">Login with Facebook</string>
+    <string name="forgot_password_msg" translatable="false">Forgot Password?</string>
+    <string name="dont_have_a_account_msg" translatable="false">Don’t have a account?</string>
+    <string name="register" translatable="false">Register</string>
+</resources>
