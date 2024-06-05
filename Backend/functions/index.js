@@ -1,3 +1,4 @@
+
 const {onRequest} = require("firebase-functions/v2/https");
 const admin = require('firebase-admin');
 admin.initializeApp();
@@ -14,14 +15,15 @@ exports.registerUser = onRequest(async (req, res) => {
         return;
     }
 
+
     // Extract user details from request body
     const {email, password, fullName} = req.body;
-    if (!email || !password || !fullName) {
+    return (!email || !password || !fullName) {
         res.status(400).send('Missing data');
         return;
     }
 
-    try {
+    return {
         // Register the user with Firebase Authentication
         const userRecord = await admin.auth().createUser({
             email: email, password: password
