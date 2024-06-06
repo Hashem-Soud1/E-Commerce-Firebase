@@ -11,19 +11,17 @@ import com.example.e_commerce.R
 import com.example.e_commerce.data.models.Resource
 import com.example.e_commerce.databinding.FragmentForgetPasswordBinding
 import com.example.e_commerce.ui.auth.viewmodel.ForgetPasswordViewModel
-import com.example.e_commerce.ui.auth.viewmodel.ForgetPasswordViewModelFactory
 import com.example.e_commerce.ui.common.model.ProgressDialog
 import com.example.e_commerce.utils.showSnakeBarError
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-
+@AndroidEntryPoint
 class ForgetPasswordFragment : BottomSheetDialogFragment() {
 
-    private val viewModel: ForgetPasswordViewModel by viewModels {
-        ForgetPasswordViewModelFactory()
-    }
+    private val viewModel: ForgetPasswordViewModel by viewModels ()
 
     private var _binding: FragmentForgetPasswordBinding? = null
     private val binding get() = _binding!!

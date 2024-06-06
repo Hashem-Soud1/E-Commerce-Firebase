@@ -19,7 +19,6 @@ import com.example.e_commerce.data.models.Resource
 import com.example.e_commerce.databinding.FragmentRegisterBinding
 import com.example.e_commerce.ui.auth.getGoogleRequestIntent
 import com.example.e_commerce.ui.auth.viewmodel.RegisterViewModel
-import com.example.e_commerce.ui.auth.viewmodel.RegisterViewModelFactory
 import com.example.e_commerce.ui.common.model.ProgressDialog
 import com.example.e_commerce.utils.CrashlyticsUtils
 import com.example.e_commerce.utils.RegisterException
@@ -37,7 +36,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+
+@AndroidEntryPoint
+
 
 class RegisterFragment : Fragment() {
 
@@ -46,9 +49,7 @@ class RegisterFragment : Fragment() {
 
     private val progressDialog by lazy { ProgressDialog.createProgressDialog(requireActivity()) }
 
-    private val registerViewModel: RegisterViewModel by viewModels {
-        RegisterViewModelFactory(contextValue = requireContext())
-    }
+    private val registerViewModel: RegisterViewModel by viewModels ()
 
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!

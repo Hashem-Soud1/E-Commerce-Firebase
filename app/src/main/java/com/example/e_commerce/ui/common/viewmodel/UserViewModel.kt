@@ -18,17 +18,19 @@ import com.example.e_commerce.data.repository.user.UserPreferenceRepository
 import com.example.e_commerce.data.repository.user.UserPreferenceRepositoryImpl
 import com.example.e_commerce.domain.toUserDetailsModel
 import com.example.e_commerce.domain.toUserDetailsPreferences
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-
-class UserViewModel(
+import javax.inject.Inject
+import kotlinx.coroutines.flow.mapLatest as mapLatest1
+@HiltViewModel
+class UserViewModel @Inject constructor(
     private val appPreferencesRepository: AppPreferenceRepository,
     private val userPreferencesRepository:UserPreferenceRepository,
     private val userFirestoreRepository: UserFirestoreRepository,
@@ -49,7 +51,7 @@ class UserViewModel(
     // note that this flow block the main thread while you get the data every time you call it
     @OptIn(ExperimentalCoroutinesApi::class)
     fun getUserDetails() =
-        userPreferencesRepository.getUserDetails().mapLatest { it.toUserDetailsModel() }
+        userPreferencesRepository.getUserDetails().mapLatest1 { it.toUserDetailsModel() }
 
 
     private fun listenToUserDetails() = viewModelScope.launch {
@@ -86,20 +88,3 @@ class UserViewModel(
 
 }
 
-class UserViewModelFactory(
-    private  val context: Context,
-): ViewModelProvider.Factory {
-    private val appPreferencesRepository =
-        AppDataStoreRepositoryImpl(AppPreferencesDataSource(context))
-
-    private val userPreferencesRepository = UserPreferenceRepositoryImpl(context)
-    private val userFirestoreRepository = UserFirestoreRepositoryImp()
-    private val authRepository = FirebaseAuthRepositoryImpl()
-    override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
-        if (modelClass.isAssignableFrom(UserViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return UserViewModel(appPreferencesRepository,userPreferencesRepository,userFirestoreRepository,authRepository) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
-    }
-}
