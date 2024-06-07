@@ -119,10 +119,8 @@ dependencies {
     // Dagger Hilt
     implementation("com.google.dagger:hilt-android:2.51.1")
     kapt("com.google.dagger:hilt-android-compiler:2.51.1")
-    
-    // For instrumentation tests
-    androidTestImplementation ("com.google.dagger:hilt-android-testing:2.51.1")
-    kaptAndroidTest ("com.google.dagger:hilt-compiler:2.51.1")
+
+
 
 
 }

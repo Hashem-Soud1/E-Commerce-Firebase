@@ -16,11 +16,12 @@ import androidx.lifecycle.lifecycleScope
 import com.example.e_commerce.R
 import com.example.e_commerce.ui.common.viewmodel.UserViewModel
 import com.example.e_commerce.ui.auth.AuthActivity
+import dagger.hilt.android.AndroidEntryPoint
 
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private val userViewModel: UserViewModel by viewModels ()
