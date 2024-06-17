@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">E-Commerce</string>
-<!-- TODO: Remove or change this placeholder text -->
+
+
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="auth_welcome_msg" translatable="false">Welcome my App</string>
     <string name="sign_in_msg" translatable="false">Sign in to continue</string>
@@ -13,5 +14,22 @@
     <string name="forgot_password_msg" translatable="false">Forgot Password?</string>
     <string name="dont_have_a_account_msg" translatable="false">Don’t have a account?</string>
     <string name="register" translatable="false">Register</string>
+    <string name="loading" translatable="false">loading</string>
+    <string name="ok" translatable="false">OK</string>
+    <string name="retry" translatable="false">Retry</string>
+    <string name="google_sign_in_field_msg" translatable="false">Google sign in failed, please retry again later.</string>
+    <string name="facebook_sign_in_field_msg" translatable="false">facebook sign in failed, please retry again later.</string>
+    <string name="generic_err_msg" translatable="false">Error please try again later.</string>
+    <string name="register_welcome_msg" translatable="false">Let’s Get Started</string>
+    <string name="sign_up_msg" translatable="false">Create a new account</string>
+    <string name="name_et_hint" translatable="false">Full Name</string>
+    <string name="password_again_et_hint" translatable="false">Password Again</string>
+    <string name="sign_up" translatable="false">Sign Up</string>
+    <string name="have_an_account_msg" translatable="false">have an account?</string>
+    <string name="google_signup_btn_msg" translatable="false">Sign up with Google</string>
+    <string name="facebook_signup_btn_msg" translatable="false">Sign up with facebook</string>
+    <string name="forget_password_msg">Enter your email, to send an email to update your password.</string>
+    <string name="send">Send</string>
+
 
 </resources>
