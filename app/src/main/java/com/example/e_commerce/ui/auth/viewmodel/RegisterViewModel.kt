@@ -1,18 +1,14 @@
 package com.example.e_commerce.ui.auth.viewmodel
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.e_commerce.data.datasource.datastore.AppPreferencesDataSource
 import com.example.e_commerce.data.models.Resource
+import com.example.e_commerce.data.models.auth.RegisterRequestModel
+import com.example.e_commerce.data.models.auth.RegisterResponseModel
 import com.example.e_commerce.data.models.user.UserDetailsModel
 import com.example.e_commerce.data.repository.auth.FirebaseAuthRepository
-import com.example.e_commerce.data.repository.auth.FirebaseAuthRepositoryImpl
-import com.example.e_commerce.data.repository.common.AppDataStoreRepositoryImpl
 import com.example.e_commerce.data.repository.common.AppPreferenceRepository
 import com.example.e_commerce.data.repository.user.UserPreferenceRepository
-import com.example.e_commerce.data.repository.user.UserPreferenceRepositoryImpl
 import com.example.e_commerce.utils.isValidEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -32,8 +28,8 @@ class RegisterViewModel @Inject constructor(
     private val authRepository: FirebaseAuthRepository
 ) : ViewModel() {
 
-    private val _registerState = MutableSharedFlow<Resource<UserDetailsModel>>()
-    val registerState: SharedFlow<Resource<UserDetailsModel>> = _registerState.asSharedFlow()
+    private val _registerState = MutableSharedFlow<Resource<RegisterResponseModel>>()
+    val registerState: SharedFlow<Resource<RegisterResponseModel>> = _registerState.asSharedFlow()
 
     val name = MutableStateFlow("")
     val email = MutableStateFlow("")
@@ -47,12 +43,15 @@ class RegisterViewModel @Inject constructor(
     }
 
     fun registerWithEmailAndPassword() = viewModelScope.launch(Dispatchers.IO) {
-        val name = name.value
-        val email = email.value
-        val password = password.value
+
+        val registerRequestModel = RegisterRequestModel(
+            fullName = name.value,
+            email = email.value,
+            password = password.value
+        )
         if (isRegisterIsValid.first()) {
             // handle register flow
-            authRepository.registerWithEmailAndPassword(name, email, password).collect {
+            authRepository.registerWithEmailAndPasswordWithApi(registerRequestModel).collect {
                 _registerState.emit(it)
             }
         } else {
@@ -61,15 +60,15 @@ class RegisterViewModel @Inject constructor(
     }
 
     fun signUpWithGoogle(idToken: String) = viewModelScope.launch {
-        authRepository.registerWithGoogle(idToken).collect {
-            _registerState.emit(it)
-        }
+//        authRepository.registerWithGoogle(idToken).collect {
+//            _registerState.emit(it)
+//        }
     }
 
     fun registerWithFacebook(token: String) = viewModelScope.launch {
-        authRepository.registerWithFacebook(token).collect {
-            _registerState.emit(it)
-        }
+//        authRepository.registerWithFacebook(token).collect {
+//            _registerState.emit(it)
+//        }
     }
 }
 

@@ -1,21 +1,13 @@
 package com.example.e_commerce.ui.common.viewmodel
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.CreationExtras
-import com.example.e_commerce.data.datasource.datastore.AppPreferencesDataSource
 import com.example.e_commerce.data.models.Resource
 
 import com.example.e_commerce.data.repository.auth.FirebaseAuthRepository
-import com.example.e_commerce.data.repository.auth.FirebaseAuthRepositoryImpl
-import com.example.e_commerce.data.repository.common.AppDataStoreRepositoryImpl
 import com.example.e_commerce.data.repository.common.AppPreferenceRepository
 import com.example.e_commerce.data.repository.user.UserFirestoreRepository
-import com.example.e_commerce.data.repository.user.UserFirestoreRepositoryImp
 import com.example.e_commerce.data.repository.user.UserPreferenceRepository
-import com.example.e_commerce.data.repository.user.UserPreferenceRepositoryImpl
 import com.example.e_commerce.domain.toUserDetailsModel
 import com.example.e_commerce.domain.toUserDetailsPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel

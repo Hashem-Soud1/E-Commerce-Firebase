@@ -1,10 +1,8 @@
 package com.example.e_commerce.data.repository.user
 
 import android.app.Application
-import android.content.Context
-import com.example.e_commerce.data.datasource.datastore.userDetailsDataStore
+import com.example.e_commerce.data.data_source.data_store.userDetailsDataStore
 import com.example.e_commerce.data.models.user.UserDetailsPreferences
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

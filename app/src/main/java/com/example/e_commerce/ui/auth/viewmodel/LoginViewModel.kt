@@ -1,19 +1,12 @@
 package com.example.e_commerce.ui.auth.viewmodel
 
-import android.content.Context
-import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.e_commerce.data.datasource.datastore.AppPreferencesDataSource
 import com.example.e_commerce.data.models.Resource
 import com.example.e_commerce.data.models.user.UserDetailsModel
 import com.example.e_commerce.data.repository.auth.FirebaseAuthRepository
-import com.example.e_commerce.data.repository.auth.FirebaseAuthRepositoryImpl
-import com.example.e_commerce.data.repository.common.AppDataStoreRepositoryImpl
 import com.example.e_commerce.data.repository.common.AppPreferenceRepository
 import com.example.e_commerce.data.repository.user.UserPreferenceRepository
-import com.example.e_commerce.data.repository.user.UserPreferenceRepositoryImpl
 import com.example.e_commerce.domain.toUserDetailsPreferences
 import com.example.e_commerce.utils.isValidEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,8 +19,6 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 @HiltViewModel

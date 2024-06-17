@@ -1,6 +1,11 @@
 package com.example.e_commerce.data.repository.auth
 
+import android.util.Log
+import com.example.e_commerce.data.data_source.networking.CloudFunctionAPI
+import com.example.e_commerce.data.data_source.networking.handleErrorResponse
 import com.example.e_commerce.data.models.Resource
+import com.example.e_commerce.data.models.auth.RegisterRequestModel
+import com.example.e_commerce.data.models.auth.RegisterResponseModel
 import com.example.e_commerce.data.models.user.AuthProvider
 import com.example.e_commerce.data.models.user.UserDetailsModel
 import com.example.e_commerce.utils.CrashlyticsUtils
@@ -17,7 +22,8 @@ import javax.inject.Inject
 
 class FirebaseAuthRepositoryImpl @Inject constructor(
     private val auth: FirebaseAuth ,
-    private val firestore: FirebaseFirestore
+    private val firestore: FirebaseFirestore,
+    private val cloudFunctionAPI: CloudFunctionAPI
 ) : FirebaseAuthRepository {
 
      // Example usage for email and password login
@@ -196,8 +202,34 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
          }
      }
 
+    override suspend fun registerWithEmailAndPasswordWithApi(registerRequestModel: RegisterRequestModel): Flow<Resource<RegisterResponseModel>> {
+        return flow {
+            try {
+                emit(Resource.Loading())
+                val response = cloudFunctionAPI.registerUser(registerRequestModel)
+                if (response.isSuccessful) {
+                    val registerResponse = response.body()
+                    registerResponse?.data?.let {
+                        emit(Resource.Success(it))
+                    } ?: run {
+                        emit(Resource.Error(Exception(registerResponse?.message)))
+                    }
+                } else {
+                    Log.d(
+                        TAG,
+                        "registerEmailAndPasswordWithAPI: Error registering user = ${response.errorBody()}"
+                    )
+                    emit(Resource.Error(Exception(handleErrorResponse(response.errorBody()!!.charStream()))))
+                }
+            } catch (e: Exception) {
+                emit(Resource.Error(e))
+            }
+        }
+    }
 
-     companion object {
+
+
+    companion object {
         private const val TAG = "FirebaseAuthRepositoryI"
     }
 }

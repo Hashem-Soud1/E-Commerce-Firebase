@@ -1,4 +1,4 @@
-package com.example.e_commerce.data.datasource.datastore
+package com.example.e_commerce.data.data_source.data_store
 
 import android.content.Context
 import androidx.datastore.preferences.core.edit
