@@ -1,7 +1,7 @@
 package com.example.e_commerce.data.repository.common
 
 
-import com.example.e_commerce.data.datasource.datastore.AppPreferencesDataSource
+import com.example.e_commerce.data.data_source.data_store.AppPreferencesDataSource
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

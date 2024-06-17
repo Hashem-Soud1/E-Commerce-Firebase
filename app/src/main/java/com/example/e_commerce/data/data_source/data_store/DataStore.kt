@@ -1,4 +1,4 @@
-package com.example.e_commerce.data.datasource.datastore
+package com.example.e_commerce.data.data_source.data_store
 
 
 import android.content.Context
@@ -9,9 +9,8 @@ import androidx.datastore.dataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import com.example.e_commerce.data.datasource.datastore.DataStoreKeys.E_COMMERCE_PREFERENCES
-import androidx.datastore.preferences.core.stringPreferencesKey
-import com.example.e_commerce.data.datasource.datastore.DataStoreKeys.User_Details_Preferences
+import com.example.e_commerce.data.data_source.data_store.DataStoreKeys.E_COMMERCE_PREFERENCES
+import com.example.e_commerce.data.data_source.data_store.DataStoreKeys.User_Details_Preferences
 import com.example.e_commerce.data.models.user.UserDetailsPreferences
 import com.google.protobuf.InvalidProtocolBufferException
 import java.io.InputStream
