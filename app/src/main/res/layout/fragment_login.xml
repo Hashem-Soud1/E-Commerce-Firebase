@@ -4,7 +4,7 @@
     <data>
 
         <variable
-            name="viewmodel"
+            name="viewModel"
             type="com.example.e_commerce.ui.auth.viewmodel.LoginViewModel" />
     </data>
 
@@ -16,7 +16,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:gravity="center_horizontal"
@@ -26,6 +26,7 @@
                 android:layout_width="72dp"
                 android:layout_height="72dp"
                 android:layout_marginTop="40dp"
+
                 android:src="@drawable/ic_primary_logo" />
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -52,7 +53,7 @@
                 android:drawableStart="@drawable/ic_email"
                 android:hint="@string/email_et_hint"
                 android:inputType="textEmailAddress"
-                android:text="@={viewmodel.email}" />
+                android:text="@={viewModel.email}" />
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/password_et"
@@ -63,7 +64,7 @@
                 android:drawableStart="@drawable/ic_password"
                 android:inputType="textPassword"
                 android:hint="@string/password_et_hint"
-                android:text="@={viewmodel.password}"
+                android:text="@={viewModel.password}"
                 />
 
             <Button
