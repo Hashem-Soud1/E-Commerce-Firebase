@@ -28,8 +28,14 @@
     <string name="have_an_account_msg" translatable="false">have an account?</string>
     <string name="google_signup_btn_msg" translatable="false">Sign up with Google</string>
     <string name="facebook_signup_btn_msg" translatable="false">Sign up with facebook</string>
-    <string name="forget_password_msg">Enter your email, to send an email to update your password.</string>
-    <string name="send">Send</string>
+    <string name="forget_password_msg" translatable="false">Enter your email, to send an email to update your password.</string>
+    <string name="send" translatable="false">Send</string>
+    <string name="home" translatable="false">Home</string>
+    <string name="explore" translatable="false">Explore</string>
+    <string name="cart" translatable="false">Cart</string>
+    <string name="offer" translatable="false">Offer</string>
+    <string name="account" translatable="false">Account</string>
+    <string name="search_products" translatable="false">Search Products</string>
 
 
 </resources>
