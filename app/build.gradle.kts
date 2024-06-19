@@ -132,6 +132,10 @@ dependencies {
     implementation("com.github.pwittchen:reactivenetwork-rx2:3.0.8")
 
 
+    //viewpager 2
+    implementation("androidx.viewpager2:viewpager2:1.1.0")
+
+
 
 
 }
