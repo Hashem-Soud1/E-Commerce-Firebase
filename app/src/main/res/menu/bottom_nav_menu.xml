@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/homef"
+        android:icon="@drawable/ic_home"
+        android:title="@string/home" />
+
+    <item
+        android:id="@+id/exploref"
+        android:icon="@drawable/ic_search"
+        android:title="@string/explore" />
+    <item
+        android:id="@+id/cartf"
+        android:icon="@drawable/ic_cart"
+        android:title="@string/cart" />
+
+    <item
+        android:id="@+id/offerf"
+        android:icon="@drawable/ic_offer"
+        android:title="@string/offer" />
+    <item
+        android:id="@+id/accountf"
+        android:icon="@drawable/ic_account"
+        android:title="@string/account" />
+</menu>
