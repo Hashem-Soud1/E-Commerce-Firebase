@@ -91,32 +91,41 @@
                     android:layout_marginTop="8dp"
                     android:background="@color/neutral_light" />
 
-                <View
+       <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/sale_ads_view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:nestedScrollingEnabled="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+         <include
+          android:id="@+id/shimmer_sales_ads"
+           layout="@layout/shimmer_item_sales_ads"
+
+         />
+     </RelativeLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/indicator_view"
                     android:layout_width="match_parent"
-                    android:layout_height="322dp"
-                    android:background="@color/black"
-
-                    />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="322dp"
-                    android:background="@color/white"
-
-                    />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="400dp"
-                    android:background="@color/primary_color"
-
-                    />
+                    android:layout_height="16dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="horizontal" />
 
 
             </LinearLayout>
 
 
+
         </androidx.core.widget.NestedScrollView>
+
+
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

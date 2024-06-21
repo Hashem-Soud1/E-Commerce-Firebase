@@ -49,6 +49,7 @@ class MainActivity : AppCompatActivity() {
                setContentView(R.layout.activity_main)
 
 
+
         _bindig = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -67,8 +68,10 @@ class MainActivity : AppCompatActivity() {
         )
 
         val adapter = HomeViewPagerAdapter(this, fragments)
-        binding.homeViewPager.adapter = adapter
-        binding.homeViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+        binding.mainViewPager.adapter = adapter
+        binding.mainViewPager.isUserInputEnabled = false
+        binding.mainViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+
             override fun onPageSelected(position: Int) {
                 when (position) {
                     0 -> binding.bottomNavigationView.selectedItemId = R.id.homef
@@ -87,11 +90,11 @@ class MainActivity : AppCompatActivity() {
     private fun initBottomNavigationView() {
         binding.bottomNavigationView.setOnItemSelectedListener {
             when (it.itemId) {
-                R.id.homef -> binding.homeViewPager.currentItem = 0
-                R.id.exploref -> binding.homeViewPager.currentItem = 1
-                R.id.cartf -> binding.homeViewPager.currentItem = 2
-                R.id.offerf -> binding.homeViewPager.currentItem = 3
-                R.id.accountf -> binding.homeViewPager.currentItem = 4
+                R.id.homef -> binding.mainViewPager.currentItem = 0
+                R.id.exploref -> binding.mainViewPager.currentItem = 1
+                R.id.cartf -> binding.mainViewPager.currentItem = 2
+                R.id.offerf -> binding.mainViewPager.currentItem = 3
+                R.id.accountf -> binding.mainViewPager.currentItem = 4
             }
             true
         }
