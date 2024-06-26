@@ -1,4 +1,4 @@
-package com.example.e_commerce.ui.common.model
+package com.example.e_commerce.ui.home.model
 
 import java.util.Date
 

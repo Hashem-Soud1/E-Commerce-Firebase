@@ -1,7 +1,6 @@
 package com.example.e_commerce.ui.home.adapter
 
 import android.os.CountDownTimer
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -9,9 +8,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.e_commerce.databinding.ItemSalesAdsBinding
-import com.example.e_commerce.ui.common.model.SalesAdUIModel
+import com.example.e_commerce.ui.home.model.SalesAdUIModel
 import java.util.Date
-import java.util.concurrent.TimeUnit
 
 class SalesAdAdapter(private val salesAds: List<SalesAdUIModel>) :
     RecyclerView.Adapter<SalesAdAdapter.SalesAdViewHolder>() {

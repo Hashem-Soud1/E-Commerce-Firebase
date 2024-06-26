@@ -1,19 +1,25 @@
 package com.example.e_commerce.ui.home.fragments
 
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.e_commerce.R
 import com.example.e_commerce.data.models.Resource
 import com.example.e_commerce.databinding.FragmentHomeBinding
 import com.example.e_commerce.ui.common.fragments.BaseFragment
-import com.example.e_commerce.ui.common.model.SalesAdUIModel
+import com.example.e_commerce.ui.home.adapter.CategoryAdapter
+import com.example.e_commerce.ui.home.model.SalesAdUIModel
 import com.example.e_commerce.ui.home.adapter.SalesAdAdapter
+import com.example.e_commerce.ui.home.model.CategoryUIModel
 import com.example.e_commerce.ui.home.viewmodel.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -41,6 +47,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
 
 
     private fun initViewModel() {
+
         lifecycleScope.launch {
             viewModel.salesAdsState.collect { resources ->
                 when (resources) {
@@ -61,6 +68,41 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
                 }
             }
         }
+
+        lifecycleScope.launch {
+            viewModel.categoryState.collect { resources ->
+                when (resources) {
+                    is Resource.Loading -> {
+                        Log.d("HASHEML", "initViewModel: categories Success = ${resources.data}")
+
+                    }
+
+                    is Resource.Success -> {
+                        Log.d("HASHEM", "initViewModel: categories Success = ${resources.data}")
+                       initCategoryView(resources.data!!)
+                    }
+
+                    is Resource.Error -> {
+                        Log.d("HASHEME", "initViewModel: categories Success = ${resources.data}")
+
+                    }
+                }
+            }
+        }
+    }
+
+    private fun initCategoryView(data: List<CategoryUIModel>) {
+      val categoryAdapter = CategoryAdapter(data)
+
+        binding.categoriesRecyclerView.apply {
+            adapter = categoryAdapter
+            setHasFixedSize(true)
+            layoutManager= LinearLayoutManager(
+                context, LinearLayoutManager.HORIZONTAL, false)
+
+            isNestedScrollingEnabled = false
+        }
+
     }
 
 

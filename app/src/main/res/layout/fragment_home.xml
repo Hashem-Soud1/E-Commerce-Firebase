@@ -95,14 +95,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         >
-        <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/sale_ads_view_pager"
-        android:layout_width="match_parent"
-        android:layout_height="220dp"
-        android:nestedScrollingEnabled="true"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-         <include
+           <androidx.viewpager2.widget.ViewPager2
+               android:id="@+id/sale_ads_view_pager"
+               android:layout_width="match_parent"
+               android:layout_height="220dp"
+               android:layout_alignParentEnd="true"
+               android:layout_alignParentBottom="true"
+               android:layout_marginEnd="0dp"
+               android:layout_marginBottom="0dp"
+               android:nestedScrollingEnabled="true"
+               app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+           <include
           android:id="@+id/shimmer_sales_ads"
            layout="@layout/shimmer_item_sales_ads"
 
@@ -113,10 +118,41 @@
                 <LinearLayout
                     android:id="@+id/indicator_view"
                     android:layout_width="match_parent"
-                    android:layout_height="16dp"
+                    android:layout_height="10dp"
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:orientation="horizontal" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:paddingStart="16dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="8dp">
+
+                    <TextView
+                        style="@style/TitleTextStyle"
+                        android:layout_height="26dp"
+                        android:layout_weight="1"
+                        android:text="@string/category"
+                        android:layout_width="0dp" />
+
+                    <TextView
+                        android:id="@+id/forgot_password_tv"
+                        style="@style/MediumPrimaryTextViewStyle"
+                        android:layout_gravity="center"
+                        android:text="@string/more_categories"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/categories_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
 
 
             </LinearLayout>

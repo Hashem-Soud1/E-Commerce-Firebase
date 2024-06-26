@@ -36,6 +36,8 @@
     <string name="offer" translatable="false">Offer</string>
     <string name="account" translatable="false">Account</string>
     <string name="search_products" translatable="false">Search Products</string>
+    <string name="category" translatable="false">Category\n</string>
+    <string name="more_categories" translatable="false">More Category</string>
 
 
 </resources>

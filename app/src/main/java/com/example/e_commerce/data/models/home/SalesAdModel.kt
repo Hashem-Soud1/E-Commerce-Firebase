@@ -1,7 +1,7 @@
 package com.example.e_commerce.data.models.home
 
 import android.os.Parcelable
-import com.example.e_commerce.ui.common.model.SalesAdUIModel
+import com.example.e_commerce.ui.home.model.SalesAdUIModel
 import com.google.errorprone.annotations.Keep
 import kotlinx.parcelize.Parcelize
 import java.util.Date
