@@ -1,4 +1,4 @@
-package com.example.e_commerce.domain
+package com.example.e_commerce.domain.models
 
 import com.example.e_commerce.data.models.user.UserDetailsModel
 import com.example.e_commerce.data.models.user.UserDetailsPreferences

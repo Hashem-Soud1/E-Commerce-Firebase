@@ -8,8 +8,8 @@ import com.example.e_commerce.data.repository.auth.FirebaseAuthRepository
 import com.example.e_commerce.data.repository.common.AppPreferenceRepository
 import com.example.e_commerce.data.repository.user.UserFirestoreRepository
 import com.example.e_commerce.data.repository.user.UserPreferenceRepository
-import com.example.e_commerce.domain.toUserDetailsModel
-import com.example.e_commerce.domain.toUserDetailsPreferences
+import com.example.e_commerce.domain.models.toUserDetailsModel
+import com.example.e_commerce.domain.models.toUserDetailsPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.ExperimentalCoroutinesApi
