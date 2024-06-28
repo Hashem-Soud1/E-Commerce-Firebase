@@ -3,9 +3,18 @@ syntax = "proto3";
 option java_package = "com.example.e_commerce.data.models.user";
 option java_multiple_files = true;
 
+
+message CountryDetails {
+  string id = 1;
+  string name = 2;
+  string imag = 4;
+  string currnecy = 5;
+}
+
 message UserDetailsPreferences {
   string id = 1;
   string email = 2;
   string name = 3;
   repeated string reviews = 4;
+  CountryDetails country = 5;
 }
