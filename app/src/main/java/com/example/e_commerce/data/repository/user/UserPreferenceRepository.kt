@@ -18,5 +18,5 @@ interface UserPreferenceRepository {
 
     suspend fun saveUserCountry(country: CountryModel)
 
-    fun getUserCountry(): Flow<CountryDetails>
+     fun getUserCountry(): Flow<CountryDetails>
 }

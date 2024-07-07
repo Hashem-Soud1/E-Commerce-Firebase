@@ -38,6 +38,9 @@
     <string name="search_products" translatable="false">Search Products</string>
     <string name="category" translatable="false">Category\n</string>
     <string name="more_categories" translatable="false">More Category</string>
+    <string name="flash_sale" translatable="false">Flash Sale</string>
+    <string name="more_flash_sales">See more</string>
+    <string name="select_country_msg">Please select your country</string>
 
 
 </resources>

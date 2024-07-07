@@ -14,4 +14,7 @@
     <string name="dont_have_a_account_msg" translatable="false">Don’t have a account?</string>
     <string name="register" translatable="false">Register</string>
     <string name="more_categories">More Category</string>
+    <string name="splash_screen_title">Flash Slae</string>
+    <string name="more_flash_sales">See more\n</string>
+    <string name="select_country_msg">Select Your Country\n</string>
 </resources>

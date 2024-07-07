@@ -1,7 +1,6 @@
 package com.example.e_commerce.ui.home.fragments
 
 
-import android.content.ContentValues.TAG
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -20,8 +19,12 @@ import com.example.e_commerce.ui.home.adapter.CategoryAdapter
 import com.example.e_commerce.ui.home.model.SalesAdUIModel
 import com.example.e_commerce.ui.home.adapter.SalesAdAdapter
 import com.example.e_commerce.ui.home.model.CategoryUIModel
+import com.example.e_commerce.ui.home.model.ProductUIModel
 import com.example.e_commerce.ui.home.viewmodel.HomeViewModel
+import com.example.e_commerce.ui.product.adapter.ProductAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 
@@ -73,22 +76,49 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
             viewModel.categoryState.collect { resources ->
                 when (resources) {
                     is Resource.Loading -> {
-                        Log.d("HASHEML", "initViewModel: categories Success = ${resources.data}")
 
                     }
 
                     is Resource.Success -> {
-                        Log.d("HASHEM", "initViewModel: categories Success = ${resources.data}")
                        initCategoryView(resources.data!!)
                     }
 
                     is Resource.Error -> {
-                        Log.d("HASHEME", "initViewModel: categories Success = ${resources.data}")
 
                     }
                 }
             }
         }
+
+      lifecycleScope.launch {
+            viewModel.flashSalesState.collect { products ->
+
+                initFlashSalesView(products)
+
+            }
+      }
+
+
+
+
+
+
+
+    }
+
+    private fun initFlashSalesView(products: List<ProductUIModel>) {
+        val adapter = ProductAdapter()
+
+        binding.flashSaleRecyclerView.apply {
+            this.adapter = adapter
+            layoutManager = LinearLayoutManager(
+                context, RecyclerView.HORIZONTAL, false
+            )
+        }
+
+        adapter.submitList(products)
+        binding.invalidateAll()
+
     }
 
     private fun initCategoryView(data: List<CategoryUIModel>) {

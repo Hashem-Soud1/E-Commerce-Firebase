@@ -7,6 +7,8 @@ import com.example.e_commerce.data.models.auth.CountryModel
 import com.example.e_commerce.data.models.user.CountryDetails
 import com.example.e_commerce.data.models.user.UserDetailsPreferences
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -33,21 +35,31 @@ class UserPreferenceRepositoryImpl @Inject constructor(private val context: Appl
     }
 
     override suspend fun saveUserCountry(country: CountryModel) {
+
         val countryData = CountryDetails.newBuilder().setId(country.id)
-            .setName(country.name).setCurrnecy(country.currnecy)
+            .setName(country.name).setCurrency(country.currnecy)
+            .setCurrencySymbool(country.currencySymbool)
             .build()
+
 
         context.userDetailsDataStore.updateData { preferences ->
             preferences.toBuilder().setCountry(countryData).build()
         }
 
+
+
     }
+
 
     override suspend fun updateUserDetails(userDetailsPreferences: UserDetailsPreferences) {
         context.userDetailsDataStore.updateData { userDetailsPreferences }
     }
 
-    override fun getUserCountry(): Flow<CountryDetails> {
+    override   fun getUserCountry(): Flow<CountryDetails> {
+
+
         return context.userDetailsDataStore.data.map { it.country }
-        }
+
     }
+
+}
