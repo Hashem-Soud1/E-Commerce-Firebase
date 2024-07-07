@@ -28,7 +28,6 @@ class CountryFragment :BaseBottomSheetFragment<FragmentCountryBinding, CountryVi
     private fun initViewModel() {
         lifecycleScope.launch {
             viewModel.countryState.collect {
-
              initAdapter(it)
 
             }

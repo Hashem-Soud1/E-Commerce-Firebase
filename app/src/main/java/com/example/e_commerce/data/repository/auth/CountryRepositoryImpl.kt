@@ -18,10 +18,12 @@ class CountryRepositoryImpl @Inject constructor(
             val countries = firestore.collection("country")
                 .get().await().toObjects(CountryModel::class.java)
 
+
             val repeatCountry = mutableListOf<CountryModel>()
                 repeat(10) {
                     repeatCountry.addAll(countries)
                 }
+
 
             emit(repeatCountry)
 

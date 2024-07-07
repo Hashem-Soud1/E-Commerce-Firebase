@@ -12,7 +12,8 @@ data class CountryModel(
     val name: String? = null,
 
     @get:PropertyName("currnecy_symbool")
-    val currnecySymbool: String? = null,
+    @set:PropertyName("currnecy_symbool")
+    var currencySymbool : String? = null,
 
     val imag: String? = null,
     val currnecy: String? = null,
