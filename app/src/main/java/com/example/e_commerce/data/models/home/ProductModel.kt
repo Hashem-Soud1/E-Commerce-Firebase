@@ -27,7 +27,9 @@ data class ProductModel(
     @get:PropertyName("sale_type")
     @set:PropertyName("sale_type")
     var saleType: String? = null,
-    var colors: List<String>? = null
+    var colors: List<String>? = null,
+
+    var  rate : Float = 0.0f
 ) : Parcelable
 
 enum class ProductSaleType(val type: String) {

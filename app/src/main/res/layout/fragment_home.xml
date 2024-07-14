@@ -102,7 +102,7 @@
                android:layout_height="220dp"
                android:layout_alignParentEnd="true"
                android:layout_alignParentBottom="true"
-               android:layout_marginEnd="0dp"
+               android:layout_marginEnd="-2dp"
                android:layout_marginBottom="0dp"
                android:nestedScrollingEnabled="true"
                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
@@ -162,7 +162,9 @@
                     android:paddingStart="16dp"
                     android:paddingTop="8dp"
                     android:paddingEnd="16dp"
-                    android:paddingBottom="8dp">
+                    android:paddingBottom="8dp"
+                    android:visibilities="@{viewmodel.isEmptyFlashSale}"
+                    >
 
                     <TextView
                         style="@style/TitleTextStyle"
@@ -183,11 +185,89 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/flash_sale_recycler_view"
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:paddingStart="16dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="8dp"
+                   android:visibilities="@{viewmodel.isEmptyMegaSale}"
+                    >
+
+                    <TextView
+                        style="@style/TitleTextStyle"
+                        android:layout_height="26dp"
+                        android:layout_weight="1"
+                        android:text="@string/mega_sale"
+                        android:layout_width="0dp" />
+
+                    <TextView
+                        android:id="@+id/more_mega_sales_tv"
+                        style="@style/MediumPrimaryTextViewStyle"
+                        android:layout_gravity="center"
+                        android:text="@string/more_flash_sales"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/mega_sale_recycler_view"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     />
 
 
+
+
+                <RelativeLayout
+                    android:id="@+id/recommended_product_layout"
+                    android:layout_width="match_parent"
+                    android:padding="8dp"
+                    android:layout_height="200dp">
+
+                    <ImageView
+                        android:id="@+id/recommended_product_iv"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        tools:src="@drawable/promo_image" />
+
+                    <TextView
+                        android:id="@+id/recommended_product_title_iv"
+                        android:layout_width="300dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_margin="18dp"
+                        android:fontFamily="@font/poppins_bold"
+                        android:textColor="@android:color/white"
+                        android:textSize="28sp"
+                        android:textStyle="bold"
+                        tools:text="Recommended Product" />
+
+                    <TextView
+                        android:id="@+id/recommended_product_description_iv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_margin="18dp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:textColor="@android:color/white"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        tools:text="We recommend the best for you" />
+                </RelativeLayout>
+
+
+
+
             </LinearLayout>
+
+
+
 
 
 

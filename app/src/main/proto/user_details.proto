@@ -19,3 +19,4 @@ message UserDetailsPreferences {
   repeated string reviews = 4;
   CountryDetails country = 5;
 }
+

@@ -11,7 +11,7 @@ import com.example.e_commerce.ui.home.model.ProductUIModel
             categoriesIDs = categoryID ?: emptyList(),
             images = imag ?: emptyList(),
             price = price ?: 0,
-            rate = 0f,
+            rate =rate ?: 0.0f,
             priceAfterSale = 0,
             salePercentage = salePercentage,
             saleType = saleType,

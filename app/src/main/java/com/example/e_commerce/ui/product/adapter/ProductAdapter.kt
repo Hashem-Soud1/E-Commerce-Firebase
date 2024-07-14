@@ -2,7 +2,9 @@ package com.example.e_commerce.ui.product.adapter
 
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -28,6 +30,7 @@ class ProductAdapter : ListAdapter<ProductUIModel, ProductAdapter.ProductViewHol
 
     class ProductViewHolder(private val binding: ProductItemLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(product: ProductUIModel) {
+
             binding.product = product
 
             Glide.with(binding.root.context)
@@ -47,4 +50,7 @@ class ProductAdapter : ListAdapter<ProductUIModel, ProductAdapter.ProductViewHol
             return oldItem == newItem
         }
     }
+
+
+
 }

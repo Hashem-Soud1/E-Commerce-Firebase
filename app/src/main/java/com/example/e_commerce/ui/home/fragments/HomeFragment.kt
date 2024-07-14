@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,15 +16,18 @@ import com.example.e_commerce.R
 import com.example.e_commerce.data.models.Resource
 import com.example.e_commerce.databinding.FragmentHomeBinding
 import com.example.e_commerce.ui.common.fragments.BaseFragment
+import com.example.e_commerce.ui.common.views.loadImage
 import com.example.e_commerce.ui.home.adapter.CategoryAdapter
 import com.example.e_commerce.ui.home.model.SalesAdUIModel
 import com.example.e_commerce.ui.home.adapter.SalesAdAdapter
 import com.example.e_commerce.ui.home.model.CategoryUIModel
 import com.example.e_commerce.ui.home.model.ProductUIModel
+import com.example.e_commerce.ui.home.model.SpecialSectionUIModel
 import com.example.e_commerce.ui.home.viewmodel.HomeViewModel
 import com.example.e_commerce.ui.product.adapter.ProductAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
@@ -98,11 +102,51 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
             }
       }
 
+        lifecycleScope.launch {
+            viewModel.megaSaleState.collect { products ->
+                initMegaSaleView(products)
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.recommendedSectionDataState.collectLatest { recommendedSectionData ->
+                recommendedSectionData?.let {
+                    setupRecommendedViewData(it)
+                } ?: run {
+                 //   binding.recommendedProductLayout.visibility = View.GONE
+                }
+            }
+        }
+    }
+
+    private fun setupRecommendedViewData(sectionData: SpecialSectionUIModel) {
+Log.d("HomeFragment", "setupRecommendedViewData: $sectionData")
+        loadImage(binding.recommendedProductIv, sectionData.imag)
+        binding.recommendedProductTitleIv.text = sectionData.title
+        binding.recommendedProductDescriptionIv.text = sectionData.description
+        binding.recommendedProductLayout.setOnClickListener {
+            Toast.makeText(
+                requireContext(),
+                "Recommended Product Clicked, go to ${sectionData.type}",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
 
 
+    private fun initMegaSaleView(products: List<ProductUIModel>): List<ProductUIModel> {
+        val adapter = ProductAdapter()
 
+        binding.megaSaleRecyclerView.apply {
+            this.adapter = adapter
+            layoutManager = LinearLayoutManager(
+                context, RecyclerView.HORIZONTAL, false
+            )
+        }
 
-
+        adapter.submitList(products)
+        binding.invalidateAll()
+        return products
 
     }
 

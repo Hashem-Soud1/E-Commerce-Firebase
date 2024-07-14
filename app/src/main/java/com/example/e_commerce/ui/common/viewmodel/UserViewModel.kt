@@ -54,7 +54,7 @@ class UserViewModel @Inject constructor(
                 is Resource.Success -> {
 
                     resource.data?.let {
-                        userPreferencesRepository.updateUserDetails(it.toUserDetailsPreferences())
+                   //     userPreferencesRepository.updateUserDetails(it.toUserDetailsPreferences())
                     }
                 }
 

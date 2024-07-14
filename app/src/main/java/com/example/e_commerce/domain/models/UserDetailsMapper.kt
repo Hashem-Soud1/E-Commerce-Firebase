@@ -1,5 +1,6 @@
 package com.example.e_commerce.domain.models
 
+import com.example.e_commerce.data.models.user.CountryDetails
 import com.example.e_commerce.data.models.user.UserDetailsModel
 import com.example.e_commerce.data.models.user.UserDetailsPreferences
 
@@ -13,11 +14,12 @@ fun UserDetailsPreferences.toUserDetailsModel(): UserDetailsModel {
     )
 }
 
-fun UserDetailsModel.toUserDetailsPreferences(): UserDetailsPreferences {
+fun UserDetailsModel.toUserDetailsPreferences(countryDetails: CountryDetails): UserDetailsPreferences {
     return UserDetailsPreferences.newBuilder()
         .setId(id)
         .setEmail(email)
         .setName(name)
         .addAllReviews(reviews?.toList()?: emptyList())
+        .setCountry(countryDetails)
         .build()
 }

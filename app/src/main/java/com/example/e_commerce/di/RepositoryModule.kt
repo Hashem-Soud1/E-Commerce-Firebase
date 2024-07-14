@@ -16,6 +16,8 @@ import com.example.e_commerce.data.repository.user.UserFirestoreRepository
 import com.example.e_commerce.data.repository.user.UserFirestoreRepositoryImp
 import com.example.e_commerce.data.repository.user.UserPreferenceRepository
 import com.example.e_commerce.data.repository.user.UserPreferenceRepositoryImpl
+import com.training.ecommerce.data.repository.special_sections.SpecialSectionsRepository
+import com.training.ecommerce.data.repository.special_sections.SpecialSectionsRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -73,6 +75,12 @@ abstract class RepositoryModule {
     abstract fun bindProductsRepository(
         productsRepositoryImp: ProductsRepositoryImp
     ): ProductsRepository
+
+    @Binds
+    @Singleton
+    abstract fun provideSpecialSectionsRepositoryImpl(
+        specialSectionsRepository: SpecialSectionsRepositoryImpl
+    ): SpecialSectionsRepository
 
 
 }

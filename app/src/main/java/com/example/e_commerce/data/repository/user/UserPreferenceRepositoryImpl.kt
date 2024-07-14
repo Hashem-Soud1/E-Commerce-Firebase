@@ -41,12 +41,17 @@ class UserPreferenceRepositoryImpl @Inject constructor(private val context: Appl
             .setCurrencySymbool(country.currencySymbool)
             .build()
 
+         Log.d("countryInfo(1)",countryData.id)
 
         context.userDetailsDataStore.updateData { preferences ->
             preferences.toBuilder().setCountry(countryData).build()
         }
 
+    }
 
+    override   fun getUserCountry(): Flow<CountryDetails> {
+        Log.d("countryInfo(2)",""+context.userDetailsDataStore.data.map { it.country.id})
+        return context.userDetailsDataStore.data.map { it.country }
 
     }
 
@@ -55,11 +60,6 @@ class UserPreferenceRepositoryImpl @Inject constructor(private val context: Appl
         context.userDetailsDataStore.updateData { userDetailsPreferences }
     }
 
-    override   fun getUserCountry(): Flow<CountryDetails> {
 
-
-        return context.userDetailsDataStore.data.map { it.country }
-
-    }
 
 }

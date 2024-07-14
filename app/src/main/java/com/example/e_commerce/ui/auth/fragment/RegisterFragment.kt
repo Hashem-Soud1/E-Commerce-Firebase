@@ -115,6 +115,7 @@ class RegisterFragment : Fragment() {
             registerWithFacebook()
         }
 
+
     }
 
     private fun signOut() {
