@@ -1,5 +1,6 @@
 package com.example.e_commerce.utils
 
+import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
@@ -22,7 +23,8 @@ fun View.showRetrySnakeBarError(message: String, retry: () -> Unit) {
         ).show()
 }
 
-@BindingAdapter("android:visibilities")
-fun setVisibility(view: View, isEmpty: Boolean) {
-    view.visibility = if (isEmpty) View.GONE else View.VISIBLE
-}
+//@BindingAdapter("app:visibilities")
+//fun setVisibility(view: View, isEmpty: Boolean) {
+//    view.visibility = if (isEmpty) View.GONE else View.VISIBLE
+//
+//}

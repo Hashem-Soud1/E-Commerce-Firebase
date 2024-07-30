@@ -156,6 +156,7 @@
 
 
                 <LinearLayout
+                    android:id="@+id/flash_sale_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
@@ -163,31 +164,30 @@
                     android:paddingTop="8dp"
                     android:paddingEnd="16dp"
                     android:paddingBottom="8dp"
-                    android:visibilities="@{viewmodel.isEmptyFlashSale}"
-                    >
+                    android:tag="flash_sale_layout"
+                  >
 
-                    <TextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         style="@style/TitleTextStyle"
-                        android:layout_height="26dp"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/flash_sale"
-                        android:layout_width="0dp" />
+                        android:text="@string/flash_sale" />
 
                     <TextView
-                        android:id="@+id/more_flash_sales_tv"
+                        android:id="@+id/flash_see_more_tv"
                         style="@style/MediumPrimaryTextViewStyle"
                         android:layout_gravity="center"
-                        android:text="@string/more_flash_sales"
+                        android:text="@string/see_more"
                         android:textSize="16sp" />
-
                 </LinearLayout>
-
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/flash_sale_recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
                 <LinearLayout
+                    android:id="@+id/mega_sale_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
@@ -195,23 +195,22 @@
                     android:paddingTop="8dp"
                     android:paddingEnd="16dp"
                     android:paddingBottom="8dp"
-                   android:visibilities="@{viewmodel.isEmptyMegaSale}"
-                    >
+                    android:tag="mega_sale_layout"
+                   >
 
-                    <TextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         style="@style/TitleTextStyle"
-                        android:layout_height="26dp"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/mega_sale"
-                        android:layout_width="0dp" />
+                        android:text="@string/mega_sale" />
 
                     <TextView
-                        android:id="@+id/more_mega_sales_tv"
+                        android:id="@+id/mega_see_more_tv"
                         style="@style/MediumPrimaryTextViewStyle"
                         android:layout_gravity="center"
-                        android:text="@string/more_flash_sales"
+                        android:text="@string/see_more"
                         android:textSize="16sp" />
-
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -225,6 +224,7 @@
 
                 <RelativeLayout
                     android:id="@+id/recommended_product_layout"
+
                     android:layout_width="match_parent"
                     android:padding="8dp"
                     android:layout_height="200dp">
@@ -260,7 +260,6 @@
                         android:textStyle="bold"
                         tools:text="We recommend the best for you" />
                 </RelativeLayout>
-
 
 
 

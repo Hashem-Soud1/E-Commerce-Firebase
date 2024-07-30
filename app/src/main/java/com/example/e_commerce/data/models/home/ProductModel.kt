@@ -1,10 +1,10 @@
 package com.example.e_commerce.data.models.home
 
 import android.os.Parcelable
-import com.google.errorprone.annotations.Keep
+import androidx.annotation.Keep
+
 import com.google.firebase.firestore.PropertyName
 import kotlinx.parcelize.Parcelize
-
 @Keep
 @Parcelize
 data class ProductModel(

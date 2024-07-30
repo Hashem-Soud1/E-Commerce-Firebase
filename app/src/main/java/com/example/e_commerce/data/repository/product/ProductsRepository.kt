@@ -5,5 +5,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface ProductsRepository {
 
-    fun getSaleProducts( saleType: String, pageLimit: Int) : Flow<List<ProductModel>>
+    fun getSaleProducts(countryID: String, saleType: String, pageLimit: Int
+    ): Flow<List<ProductModel>>
 }

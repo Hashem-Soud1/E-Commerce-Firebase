@@ -23,20 +23,13 @@ class ProductAdapter : ListAdapter<ProductUIModel, ProductAdapter.ProductViewHol
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val product = getItem(position)
+        Log.d("ProductAdapter", "onBindViewHolder: ${product.id}")
         holder.bind(product)
     }
 
-
-
     class ProductViewHolder(private val binding: ProductItemLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(product: ProductUIModel) {
-
             binding.product = product
-
-            Glide.with(binding.root.context)
-                .load(product.images.firstOrNull())
-                .into(binding.productImage)
-
             binding.executePendingBindings() // This ensures that the binding has been executed immediately.
         }
     }
@@ -50,7 +43,4 @@ class ProductAdapter : ListAdapter<ProductUIModel, ProductAdapter.ProductViewHol
             return oldItem == newItem
         }
     }
-
-
-
 }

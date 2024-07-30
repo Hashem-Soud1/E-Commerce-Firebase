@@ -1,6 +1,8 @@
 package com.example.e_commerce.ui.home.viewmodel
 
+import android.content.ContentValues.TAG
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
@@ -36,63 +38,59 @@ class HomeViewModel @Inject constructor(
     salesAdsRepository: SalesAdsRepository,
     categoriesRepository: CategoriesRepository,
     userPreferenceRepository: UserPreferenceRepository,
-    val productsRepository: ProductsRepository,
+    private val productsRepository: ProductsRepository,
     private val specialSectionsRepository: SpecialSectionsRepository
 
 ):ViewModel() {
 
-   val salesAdsState = salesAdsRepository.getSalesAds().stateIn(
-    viewModelScope + IO, started = SharingStarted.Eagerly, initialValue = Resource.Loading())
+    val salesAdsState = salesAdsRepository.getSalesAds().stateIn(
+        viewModelScope + IO, started = SharingStarted.Eagerly, initialValue = Resource.Loading()
+    )
 
     val categoryState = categoriesRepository.getCategories().stateIn(
-        viewModelScope + IO, started = SharingStarted.Eagerly, initialValue = Resource.Loading())
+        viewModelScope + IO, started = SharingStarted.Eagerly, initialValue = Resource.Loading()
+    )
 
-    private val countryState = userPreferenceRepository.getUserCountry().stateIn(
-                viewModelScope + IO,
-                started = SharingStarted.Eagerly,
-                initialValue = CountryDetails.getDefaultInstance())
+    val countryState = userPreferenceRepository.getUserCountry().stateIn(
+        viewModelScope + IO,
+        started = SharingStarted.Eagerly,
+        initialValue = CountryDetails.getDefaultInstance()
+    )
 
+    val flashSaleState = getProductsSales(ProductSaleType.FLASH_SALE)
 
+    val isEmptyFlashSale : LiveData<Boolean> = flashSaleState.map { it.isEmpty() }.asLiveData()
 
+    val megaSaleState = getProductsSales(ProductSaleType.MEGA_SALE)
 
-    val flashSalesState = productsRepository.getSaleProducts("flash_sale",5)
-
-        .map { it ->
-            it.map { it.toProductUIModel().copy(
-                currencySymbol = countryState.value?.currencySymbool
-            )
-            }
-
-        }
-        .stateIn(
-            viewModelScope + IO,
-            started = SharingStarted.Eagerly,
-            initialValue = emptyList()
-        )
-
-
-    val megaSaleState = productsRepository.getSaleProducts("mega_sale",5)
-        .map { it ->
-            it.map { it.toProductUIModel().copy(
-                currencySymbol = countryState.value?.currencySymbool
-            )
-            }
-
-        }
-        .stateIn(
-            viewModelScope + IO,
-            started = SharingStarted.Eagerly,
-            initialValue = emptyList()
-        )
-
-
-    val isEmptyMegaSale  = megaSaleState.map { it.isEmpty() }.asLiveData()
-    val isEmptyFlashSale  = megaSaleState.map { it.isEmpty() }.asLiveData()
+    val isEmptyMegaSale: LiveData<Boolean> = megaSaleState.map { it.isEmpty()}.asLiveData()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val recommendedSectionDataState = specialSectionsRepository.recommendProductsSection().stateIn(
         viewModelScope + IO, started = SharingStarted.Eagerly, initialValue = null
-    ).mapLatest { it?.toSpecialSectionUIModel()}
+    ).mapLatest { it?.toSpecialSectionUIModel() }
+
+    val isRecommendedSection = recommendedSectionDataState.map { it == null }.asLiveData()
+
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private fun getProductsSales(productSaleType: ProductSaleType): StateFlow<List<ProductUIModel>> =
+        countryState.mapLatest {
+            productsRepository.getSaleProducts(it.id ?: "0", productSaleType.type, 10)
+        }.mapLatest {
+            Log.d("HomeViewModel", "${productSaleType.type +"= "}: ${it.first().map { getProductModel(it) }}")
+            it.first().map { getProductModel(it) } }.stateIn(
+            viewModelScope + IO, started = SharingStarted.Eagerly, initialValue = emptyList()
+        )
+
+
+    private fun getProductModel(product: ProductModel): ProductUIModel {
+        val productUIModel = product.toProductUIModel().copy(
+            currencySymbol = countryState.value?.currencySymbool ?: ""
+        )
+        return productUIModel
+    }
+
 
 
 

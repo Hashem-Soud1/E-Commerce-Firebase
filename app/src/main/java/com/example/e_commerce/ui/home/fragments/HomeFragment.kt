@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -44,6 +45,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
     override fun getLayoutResId() : Int = R.layout.fragment_home
 
     override fun init() {
+        initViews()
          initViewModel()
 
     }
@@ -54,6 +56,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
 
 
     private fun initViewModel() {
+
+
+
+
+
+
 
         lifecycleScope.launch {
             viewModel.salesAdsState.collect { resources ->
@@ -94,19 +102,26 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
             }
         }
 
-      lifecycleScope.launch {
-            viewModel.flashSalesState.collect { products ->
-
-                initFlashSalesView(products)
-
-            }
-      }
-
         lifecycleScope.launch {
-            viewModel.megaSaleState.collect { products ->
-                initMegaSaleView(products)
+            viewModel.flashSaleState.collect { productsList ->
+                flashSaleAdapter.submitList(productsList)
+                binding.invalidateAll()
             }
         }
+        lifecycleScope.launch {
+            viewModel.megaSaleState.collect { productsList ->
+                megaSaleAdapter.submitList(productsList)
+                binding.invalidateAll()
+            }
+        }
+
+        viewModel.isEmptyMegaSale.observe(this, Observer { isEmpty ->
+            binding.megaSaleLayout.visibility = if (isEmpty) View.GONE else View.VISIBLE
+        })
+
+        viewModel.isEmptyFlashSale.observe(this, Observer { isEmpty ->
+            binding.flashSaleLayout.visibility = if (isEmpty) View.GONE else View.VISIBLE
+        })
 
         lifecycleScope.launch {
             viewModel.recommendedSectionDataState.collectLatest { recommendedSectionData ->
@@ -134,34 +149,21 @@ Log.d("HomeFragment", "setupRecommendedViewData: $sectionData")
     }
 
 
-    private fun initMegaSaleView(products: List<ProductUIModel>): List<ProductUIModel> {
-        val adapter = ProductAdapter()
-
-        binding.megaSaleRecyclerView.apply {
-            this.adapter = adapter
-            layoutManager = LinearLayoutManager(
-                context, RecyclerView.HORIZONTAL, false
-            )
-        }
-
-        adapter.submitList(products)
-        binding.invalidateAll()
-        return products
-
-    }
-
-    private fun initFlashSalesView(products: List<ProductUIModel>) {
-        val adapter = ProductAdapter()
-
+    private val flashSaleAdapter by lazy { ProductAdapter() }
+    private val megaSaleAdapter by lazy { ProductAdapter() }
+    private fun initViews() {
         binding.flashSaleRecyclerView.apply {
-            this.adapter = adapter
+            adapter = flashSaleAdapter
             layoutManager = LinearLayoutManager(
-                context, RecyclerView.HORIZONTAL, false
+                requireContext(), LinearLayoutManager.HORIZONTAL, false
             )
         }
-
-        adapter.submitList(products)
-        binding.invalidateAll()
+        binding.megaSaleRecyclerView.apply {
+            adapter = megaSaleAdapter
+            layoutManager = LinearLayoutManager(
+                requireContext(), LinearLayoutManager.HORIZONTAL, false
+            )
+        }
 
     }
 
