@@ -82,8 +82,8 @@ dependencies {
     implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation("androidx.test.ext:junit:1.2.1")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
     implementation("androidx.core:core-splashscreen:1.0.1")
 
     // navigation components
@@ -105,7 +105,7 @@ dependencies {
 
 
     // firebase dependencies
-    implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
+    implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-crashlytics")
     implementation("com.google.firebase:firebase-firestore-ktx")
@@ -137,16 +137,13 @@ dependencies {
 
 
     //Glide
-    implementation ("com.github.bumptech.glide:glide:4.12.0")
-    kapt ("com.github.bumptech.glide:compiler:4.12.0")
+    implementation ("com.github.bumptech.glide:glide:4.14.2")
+    kapt ("com.github.bumptech.glide:compiler:4.14.2")
 
 
-   // shimmer
+    // shimmer
     implementation ("com.facebook.shimmer:shimmer:0.5.0")
-
-
-
-
+    implementation(kotlin("script-runtime"))
 
 
 }
@@ -170,9 +167,6 @@ protobuf {
     }
 }
 
-kapt {
-    correctErrorTypes = true
-}
 
 
 

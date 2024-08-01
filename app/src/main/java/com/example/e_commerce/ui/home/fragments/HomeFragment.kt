@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -26,6 +27,8 @@ import com.example.e_commerce.ui.home.model.ProductUIModel
 import com.example.e_commerce.ui.home.model.SpecialSectionUIModel
 import com.example.e_commerce.ui.home.viewmodel.HomeViewModel
 import com.example.e_commerce.ui.product.adapter.ProductAdapter
+import com.example.e_commerce.ui.product.adapter.ProductViewType
+import com.example.e_commerce.utils.GridSpacingItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
@@ -132,6 +135,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
                 }
             }
         }
+        viewModel.getNextProducts()
+        lifecycleScope.launch {
+            viewModel.allProductsState.collectLatest { productsList ->
+                allProductsAdapter.submitList(productsList)
+                binding.invalidateAll()
+            }
+        }
     }
 
     private fun setupRecommendedViewData(sectionData: SpecialSectionUIModel) {
@@ -149,8 +159,10 @@ Log.d("HomeFragment", "setupRecommendedViewData: $sectionData")
     }
 
 
-    private val flashSaleAdapter by lazy { ProductAdapter() }
-    private val megaSaleAdapter by lazy { ProductAdapter() }
+    private val flashSaleAdapter by lazy { ProductAdapter(viewType = ProductViewType.LIST) }
+    private val megaSaleAdapter by lazy { ProductAdapter(viewType = ProductViewType.LIST) }
+    private val allProductsAdapter by lazy { ProductAdapter() }
+
     private fun initViews() {
         binding.flashSaleRecyclerView.apply {
             adapter = flashSaleAdapter
@@ -163,6 +175,13 @@ Log.d("HomeFragment", "setupRecommendedViewData: $sectionData")
             layoutManager = LinearLayoutManager(
                 requireContext(), LinearLayoutManager.HORIZONTAL, false
             )
+        }
+        binding.allProductsRv.apply {
+            adapter = allProductsAdapter
+            layoutManager = GridLayoutManager(
+                requireContext(), 2
+            )
+            addItemDecoration(GridSpacingItemDecoration(2, 16, true))
         }
 
     }
