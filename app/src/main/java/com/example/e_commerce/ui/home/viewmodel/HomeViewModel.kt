@@ -113,7 +113,7 @@ class HomeViewModel @Inject constructor(
         isLoadingAllProducts.emit(true)
 
         val countryId = countryState.first().id ?: "0"
-        productsRepository.getAllProductsPaging(countryId, 2, lastDocumentSnapshot)
+        productsRepository.getAllProductsPaging(countryId, 4, lastDocumentSnapshot)
             .collectLatest { resource ->
                 when (resource) {
                     is Resource.Success -> {

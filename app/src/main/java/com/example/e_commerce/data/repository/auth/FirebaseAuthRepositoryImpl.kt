@@ -50,22 +50,56 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
 
 
 
-     private  suspend fun login(
-        authProvider: AuthProvider,
-        signInRequest: suspend () -> AuthResult
+
+    private suspend fun login(
+        provider: AuthProvider,
+        signInRequest: suspend () -> AuthResult,
     ): Flow<Resource<UserDetailsModel>> = flow {
         try {
             emit(Resource.Loading())
-            val authResult = signInRequest() // Invoke the passed lambda action to perform login
-            val userId = authResult.user?.uid!!
+            // perform firebase auth sign in request
+            val authResult = signInRequest()
+            val userId = authResult.user?.uid
+
+            if (userId == null) {
+                val msg = "Sign in UserID not found"
+                logAuthIssueToCrashlytics(msg, provider.name)
+                emit(Resource.Error(Exception(msg)))
+                return@flow
+            }
+
+//            if (authResult.user?.isEmailVerified == false) {
+//                authResult.user?.sendEmailVerification()?.await()
+//                val msg = "Email not verified, verification email sent to user"
+//                logAuthIssueToCrashlytics(msg, provider.name)
+//                emit(Resource.Error(Exception(msg)))
+//                return@flow
+//            }
+
+            // get user details from firestore
             val userDoc = firestore.collection("users").document(userId).get().await()
-            userDoc?.let {
-                val userDetails = it.toObject(UserDetailsModel::class.java)
-                emit(Resource.Success(userDetails!!))
+            if (!userDoc.exists()) {
+                Log.d(TAG, "login: $userId")
+                val msg = "Logged in user not found in firestore"
+                logAuthIssueToCrashlytics(msg, provider.name)
+                emit(Resource.Error(Exception(msg)))
+                return@flow
+            }
+
+            // map user details to UserDetailsModel
+            val userDetails = userDoc.toObject(UserDetailsModel::class.java)
+            userDetails?.let {
+                emit(Resource.Success(userDetails))
             } ?: run {
-                emit(Resource.Error(Exception("User not found")))
+                val msg = "Error mapping user details to UserDetailsModel, user id = $userId"
+                Log.d(TAG, "login: $msg")
+                logAuthIssueToCrashlytics(msg, provider.name)
+                emit(Resource.Error(Exception(msg)))
             }
         } catch (e: Exception) {
+            logAuthIssueToCrashlytics(
+                e.message ?: "Unknown error from exception = ${e::class.java}", provider.name
+            )
             emit(Resource.Error(e)) // Emit error
         }
     }
