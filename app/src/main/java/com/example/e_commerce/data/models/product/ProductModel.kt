@@ -1,4 +1,4 @@
-package com.example.e_commerce.data.models.home
+package com.example.e_commerce.data.models.product
 
 import android.os.Parcelable
 import androidx.annotation.Keep
@@ -17,7 +17,7 @@ data class ProductModel(
 
     @get:PropertyName("category_id")
     @set:PropertyName("category_id")
-    var categoryID: List<String>? = null,
+    var categoriesIDs: List<String>? = null,
 
 
     @get:PropertyName("sale_percentage")
@@ -27,9 +27,24 @@ data class ProductModel(
     @get:PropertyName("sale_type")
     @set:PropertyName("sale_type")
     var saleType: String? = null,
-    var colors: List<String>? = null,
+    var  rate : Float = 0.0f,
+    var colors: List<ProductColorModel>? = null,
+    var sizes: List<ProductSizeModel>? = null,
+) : Parcelable
 
-    var  rate : Float = 0.0f
+@Keep
+@Parcelize
+data class ProductColorModel(
+    var size: String? = null,
+    var stock: Int? = null,
+    var color: String? = null
+) : Parcelable
+
+@Keep
+@Parcelize
+data class ProductSizeModel(
+    var size: String? = null,
+    var stock: Int? = null
 ) : Parcelable
 
 enum class ProductSaleType(val type: String) {
