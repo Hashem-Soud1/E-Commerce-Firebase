@@ -4,7 +4,8 @@ import android.os.Parcelable
 import androidx.annotation.Keep
 import com.example.e_commerce.data.models.product.ProductSizeModel
 import kotlinx.parcelize.Parcelize
-
+@Keep
+@Parcelize
 data class ProductUIModel(
     val id: String,
     val name: String,
@@ -19,7 +20,7 @@ data class ProductUIModel(
     val salePercentage: Int?,       // Offer percentage can be nullable to indicate no current offers.
     val saleType: String?,           // Sale type can be nullable if not all products are on sale.
     val currencySymbol: String = ""     // Default currency is USD.
-) {
+) : Parcelable {
 
     fun getFormattedPrice(): String {
         return "$currencySymbol$price"

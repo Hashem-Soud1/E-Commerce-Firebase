@@ -1,6 +1,7 @@
 package com.example.e_commerce.ui.home.fragments
 
 
+import android.content.Intent
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -26,6 +27,8 @@ import com.example.e_commerce.ui.home.model.CategoryUIModel
 import com.example.e_commerce.ui.home.model.ProductUIModel
 import com.example.e_commerce.ui.home.model.SpecialSectionUIModel
 import com.example.e_commerce.ui.home.viewmodel.HomeViewModel
+import com.example.e_commerce.ui.product.ProductDetailsActivity
+import com.example.e_commerce.ui.product.ProductDetailsActivity.Companion.PRODUCT_UI_MODEL_EXTRA
 import com.example.e_commerce.ui.product.adapter.ProductAdapter
 import com.example.e_commerce.ui.product.adapter.ProductViewType
 import com.example.e_commerce.utils.GridSpacingItemDecoration
@@ -159,9 +162,17 @@ Log.d("HomeFragment", "setupRecommendedViewData: $sectionData")
     }
 
 
-    private val flashSaleAdapter by lazy { ProductAdapter(viewType = ProductViewType.LIST) }
-    private val megaSaleAdapter by lazy { ProductAdapter(viewType = ProductViewType.LIST) }
-    private val allProductsAdapter by lazy { ProductAdapter() }
+    private val flashSaleAdapter by lazy {
+        ProductAdapter(viewType = ProductViewType.LIST) {
+            goToProductDetails(it)
+        }
+    }
+    private val megaSaleAdapter by lazy {
+        ProductAdapter(viewType = ProductViewType.LIST) {
+            goToProductDetails(it)
+        }
+    }
+    private val allProductsAdapter by lazy { ProductAdapter{ goToProductDetails(it) } }
 
     private fun initViews() {
         binding.flashSaleRecyclerView.apply {
@@ -268,4 +279,22 @@ private fun setCurrentIndicator(index: Int) {
         }
     }
 }
+    private fun goToProductDetails(product: ProductUIModel) {
+        requireActivity().startActivity(
+            Intent(
+            requireActivity(), ProductDetailsActivity::class.java
+        ).apply {
+            putExtra(PRODUCT_UI_MODEL_EXTRA, product)
+        })
+    }
+
+//    override fun onResume() {
+//        super.onResume()
+//        viewModel.startTimer()
+//    }
+//
+//    override fun onPause() {
+//        super.onPause()
+//        viewModel.stopTimer()
+//    }
 }
