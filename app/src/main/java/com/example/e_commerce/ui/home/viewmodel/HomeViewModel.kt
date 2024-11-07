@@ -7,14 +7,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.e_commerce.data.models.Resource
-import com.example.e_commerce.data.models.home.ProductModel
-import com.example.e_commerce.data.models.home.ProductSaleType
+import com.example.e_commerce.data.models.product.ProductModel
+import com.example.e_commerce.data.models.product.ProductSaleType
 import com.example.e_commerce.data.models.user.CountryDetails
-import com.example.e_commerce.data.models.user.UserDetailsPreferences
 import com.example.e_commerce.data.repository.category.CategoriesRepository
 import com.example.e_commerce.data.repository.home.SalesAdsRepository
 import com.example.e_commerce.data.repository.product.ProductsRepository
-import com.example.e_commerce.data.repository.user.UserFirestoreRepository
 import com.example.e_commerce.data.repository.user.UserPreferenceRepository
 import com.example.e_commerce.domain.models.toProductUIModel
 import com.example.e_commerce.domain.models.toSpecialSectionUIModel

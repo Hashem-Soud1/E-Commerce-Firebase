@@ -1,8 +1,7 @@
 package com.example.e_commerce.data.repository.product
 
-import android.util.Log
 import com.example.e_commerce.data.models.Resource
-import com.example.e_commerce.data.models.home.ProductModel
+import com.example.e_commerce.data.models.product.ProductModel
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot

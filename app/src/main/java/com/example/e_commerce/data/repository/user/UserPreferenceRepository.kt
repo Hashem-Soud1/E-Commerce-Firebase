@@ -6,6 +6,7 @@ import com.example.e_commerce.data.models.user.UserDetailsPreferences
 import kotlinx.coroutines.flow.Flow
 
 interface UserPreferenceRepository {
+
     fun getUserDetails(): Flow<UserDetailsPreferences>
     suspend fun updateUserDetails(userDetailsPreferences: UserDetailsPreferences)
 

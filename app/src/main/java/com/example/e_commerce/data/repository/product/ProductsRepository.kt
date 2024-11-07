@@ -1,7 +1,7 @@
 package com.example.e_commerce.data.repository.product
 
 import com.example.e_commerce.data.models.Resource
-import com.example.e_commerce.data.models.home.ProductModel
+import com.example.e_commerce.data.models.product.ProductModel
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.flow.Flow

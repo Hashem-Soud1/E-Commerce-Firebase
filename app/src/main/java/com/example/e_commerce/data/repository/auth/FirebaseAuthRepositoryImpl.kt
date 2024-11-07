@@ -79,7 +79,6 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
             // get user details from firestore
             val userDoc = firestore.collection("users").document(userId).get().await()
             if (!userDoc.exists()) {
-                Log.d(TAG, "login: $userId")
                 val msg = "Logged in user not found in firestore"
                 logAuthIssueToCrashlytics(msg, provider.name)
                 emit(Resource.Error(Exception(msg)))
@@ -92,7 +91,6 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                 emit(Resource.Success(userDetails))
             } ?: run {
                 val msg = "Error mapping user details to UserDetailsModel, user id = $userId"
-                Log.d(TAG, "login: $msg")
                 logAuthIssueToCrashlytics(msg, provider.name)
                 emit(Resource.Error(Exception(msg)))
             }

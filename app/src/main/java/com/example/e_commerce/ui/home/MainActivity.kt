@@ -37,6 +37,7 @@ class MainActivity : AppCompatActivity() {
 
     private var _bindig: ActivityMainBinding? = null
     private val binding get() = _bindig!!
+
     override fun onCreate(savedInstanceState: Bundle?) {
         initSplashScreen()
         super.onCreate(savedInstanceState)

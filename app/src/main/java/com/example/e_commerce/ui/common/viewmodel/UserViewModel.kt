@@ -65,6 +65,7 @@ class UserViewModel @Inject constructor(
         }
     }
     suspend fun isUserLoggedIn() = appPreferencesRepository.isUserLoggedIn()
+
     suspend fun logout() {
         logoutState.emit(Resource.Loading())
         authRepository.logout()
