@@ -1,21 +1,17 @@
 package com.example.e_commerce.ui.home.adapter
 
-import android.os.CountDownTimer
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+
 import com.example.e_commerce.databinding.ItemSalesAdsBinding
 import com.example.e_commerce.ui.home.model.SalesAdUIModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.util.Date
 
 class SalesAdAdapter(
     private val lifecycleScope: LifecycleCoroutineScope, private val salesAds: List<SalesAdUIModel>
@@ -49,15 +45,15 @@ class SalesAdAdapter(
     }
 }
 
-@BindingAdapter("countdownTimer", "lifecycleScope")
-fun timerChanges(
-    view: TextView,
-    timerState: MutableStateFlow<String>?,
-    lifecycleScope: LifecycleCoroutineScope?
-) {
-    lifecycleScope?.launch {
-        timerState?.collectLatest {
-            view.text = it
-        }
-    }
-}
+//@BindingAdapter("countdownTimer", "lifecycleScope")
+//fun timerChanges(
+//    view: TextView,
+//    timerState: MutableStateFlow<String>?,
+//    lifecycleScope: LifecycleCoroutineScope?
+//) {
+//    lifecycleScope?.launch {
+//        timerState?.collectLatest {
+//            view.text = it
+//        }
+//    }
+//}

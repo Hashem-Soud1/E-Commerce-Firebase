@@ -1,8 +1,6 @@
 package com.example.e_commerce.ui.home.viewmodel
 
-import android.content.ContentValues.TAG
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
