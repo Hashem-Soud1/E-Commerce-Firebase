@@ -19,7 +19,10 @@ import com.example.e_commerce.R
 import com.example.e_commerce.data.models.Resource
 import com.example.e_commerce.databinding.FragmentHomeBinding
 import com.example.e_commerce.ui.common.fragments.BaseFragment
+import com.example.e_commerce.ui.common.views.CircleView
 import com.example.e_commerce.ui.common.views.loadImage
+import com.example.e_commerce.ui.common.views.sliderIndicatorsView
+import com.example.e_commerce.ui.common.views.updateIndicators
 import com.example.e_commerce.ui.home.adapter.CategoryAdapter
 import com.example.e_commerce.ui.home.model.SalesAdUIModel
 import com.example.e_commerce.ui.home.adapter.SalesAdAdapter
@@ -31,82 +34,75 @@ import com.example.e_commerce.ui.product.ProductDetailsActivity
 import com.example.e_commerce.ui.product.ProductDetailsActivity.Companion.PRODUCT_UI_MODEL_EXTRA
 import com.example.e_commerce.ui.product.adapter.ProductAdapter
 import com.example.e_commerce.ui.product.adapter.ProductViewType
+import com.example.e_commerce.utils.DepthPageTransformer
 import com.example.e_commerce.utils.GridSpacingItemDecoration
+import com.example.e_commerce.utils.HorizontalSpaceItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
 
-
     override val viewModel: HomeViewModel by viewModels()
-
-    private val indicatorImages = mutableListOf<ImageView>()
-
-
-    override fun getLayoutResId() : Int = R.layout.fragment_home
+    override fun getLayoutResId(): Int = R.layout.fragment_home
 
     override fun init() {
         initViews()
-         initViewModel()
-
+        iniViewModel()
     }
 
-
-
-
-
-
-    private fun initViewModel() {
-
-
-
-
-
-
-
+    private fun iniViewModel() {
         lifecycleScope.launch {
             viewModel.salesAdsState.collect { resources ->
                 when (resources) {
                     is Resource.Loading -> {
-                        binding.shimmerSalesAds.root.startShimmer()
+                        Log.d(TAG, "iniViewModel: Loading")
                     }
 
                     is Resource.Success -> {
                         binding.shimmerSalesAds.root.stopShimmer()
                         binding.shimmerSalesAds.root.visibility = View.GONE
-
-                        initSalesAdsView(resources.data!!)
-
+                        initSalesAdsView(resources.data)
                     }
 
                     is Resource.Error -> {
+                        Log.d(TAG, "iniViewModel: Error")
                     }
                 }
             }
         }
 
         lifecycleScope.launch {
-            viewModel.categoryState.collect { resources ->
+            viewModel.categoriesState.collect { resources ->
                 when (resources) {
                     is Resource.Loading -> {
-
+                        Log.d(TAG, "iniViewModel: categories Loading")
                     }
 
                     is Resource.Success -> {
-                       initCategoryView(resources.data!!)
+//                        binding.categoriesShimmerView.root.stopShimmer()
+//                        binding.categoriesShimmerView.root.visibility = View.GONE
+                        Log.d(TAG, "iniViewModel: categories Success = ${resources.data}")
+                        initCategoriesView(resources.data)
                     }
 
                     is Resource.Error -> {
-
+                        Log.d(TAG, "iniViewModel: categories Error")
                     }
                 }
             }
         }
+
+//        viewModel.getFlashSaleProducts()
 
         lifecycleScope.launch {
             viewModel.flashSaleState.collect { productsList ->
@@ -121,23 +117,18 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
             }
         }
 
-        viewModel.isEmptyMegaSale.observe(this, Observer { isEmpty ->
-            binding.megaSaleLayout.visibility = if (isEmpty) View.GONE else View.VISIBLE
-        })
-
-        viewModel.isEmptyFlashSale.observe(this, Observer { isEmpty ->
-            binding.flashSaleLayout.visibility = if (isEmpty) View.GONE else View.VISIBLE
-        })
-
         lifecycleScope.launch {
             viewModel.recommendedSectionDataState.collectLatest { recommendedSectionData ->
+                Log.d(TAG, "Recommended section data: $recommendedSectionData")
                 recommendedSectionData?.let {
                     setupRecommendedViewData(it)
                 } ?: run {
-                 //   binding.recommendedProductLayout.visibility = View.GONE
+                    Log.d(TAG, "Recommended section data is null")
+//                    binding.recommendedProductLayout.visibility = View.GONE
                 }
             }
         }
+
         viewModel.getNextProducts()
         lifecycleScope.launch {
             viewModel.allProductsState.collectLatest { productsList ->
@@ -148,19 +139,32 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
     }
 
     private fun setupRecommendedViewData(sectionData: SpecialSectionUIModel) {
-Log.d("HomeFragment", "setupRecommendedViewData: $sectionData")
         loadImage(binding.recommendedProductIv, sectionData.imag)
         binding.recommendedProductTitleIv.text = sectionData.title
         binding.recommendedProductDescriptionIv.text = sectionData.description
         binding.recommendedProductLayout.setOnClickListener {
             Toast.makeText(
                 requireContext(),
-                "Recommended Product Clicked, go to ${sectionData.type}",
+                "Recommended Product Clicked, goto ${sectionData.type}",
                 Toast.LENGTH_SHORT
             ).show()
         }
     }
 
+    private fun initCategoriesView(data: List<CategoryUIModel>?) {
+        if (data.isNullOrEmpty()) {
+            return
+        }
+        val categoriesAdapter = CategoryAdapter(data)
+        binding.categoriesRecyclerView.apply {
+            adapter = categoriesAdapter
+            setHasFixedSize(true)
+            isNestedScrollingEnabled = false
+            layoutManager = LinearLayoutManager(
+                requireContext(), LinearLayoutManager.HORIZONTAL, false
+            )
+        }
+    }
 
     private val flashSaleAdapter by lazy {
         ProductAdapter(viewType = ProductViewType.LIST) {
@@ -172,7 +176,7 @@ Log.d("HomeFragment", "setupRecommendedViewData: $sectionData")
             goToProductDetails(it)
         }
     }
-    private val allProductsAdapter by lazy { ProductAdapter{ goToProductDetails(it) } }
+    private val allProductsAdapter by lazy { ProductAdapter { goToProductDetails(it) } }
 
     private fun initViews() {
         binding.flashSaleRecyclerView.apply {
@@ -180,12 +184,14 @@ Log.d("HomeFragment", "setupRecommendedViewData: $sectionData")
             layoutManager = LinearLayoutManager(
                 requireContext(), LinearLayoutManager.HORIZONTAL, false
             )
+            addItemDecoration(HorizontalSpaceItemDecoration(16))
         }
         binding.megaSaleRecyclerView.apply {
             adapter = megaSaleAdapter
             layoutManager = LinearLayoutManager(
                 requireContext(), LinearLayoutManager.HORIZONTAL, false
             )
+            addItemDecoration(HorizontalSpaceItemDecoration(16))
         }
         binding.allProductsRv.apply {
             adapter = allProductsAdapter
@@ -194,107 +200,76 @@ Log.d("HomeFragment", "setupRecommendedViewData: $sectionData")
             )
             addItemDecoration(GridSpacingItemDecoration(2, 16, true))
         }
-
     }
 
-    private fun initCategoryView(data: List<CategoryUIModel>) {
-      val categoryAdapter = CategoryAdapter(data)
-
-        binding.categoriesRecyclerView.apply {
-            adapter = categoryAdapter
-            setHasFixedSize(true)
-            layoutManager= LinearLayoutManager(
-                context, LinearLayoutManager.HORIZONTAL, false)
-
-            isNestedScrollingEnabled = false
+    private fun initSalesAdsView(salesAds: List<SalesAdUIModel>?) {
+        if (salesAds.isNullOrEmpty()) {
+            return
         }
 
-    }
-
-
-    private fun initSalesAdsView(data: List<SalesAdUIModel>) {
-
-        val salesAdAdapter = SalesAdAdapter(data)
-        binding.saleAdsViewPager.adapter = salesAdAdapter
-
-
-
-        setupIndicators(data.size)
-        setCurrentIndicator(0)
-
-
-    binding.saleAdsViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-        override fun onPageSelected(position: Int) {
-            super.onPageSelected(position)
-            setCurrentIndicator(position)
-
-        }
-    })
-}
-
-private fun setupIndicators(count: Int) {
-    val indicators = arrayOfNulls<ImageView>(count)
-    val layoutParams: LinearLayout.LayoutParams = LinearLayout.LayoutParams(
-        ViewGroup.LayoutParams.WRAP_CONTENT,
-        ViewGroup.LayoutParams.WRAP_CONTENT
-    )
-    layoutParams.setMargins(8, 0, 8, 0)
-    for (i in indicators.indices) {
-        indicators[i] = ImageView(context)
-        indicators[i]?.setImageDrawable(
-            context?.let { it1 ->
-                androidx.core.content.ContextCompat.getDrawable(
-                    it1,
-                    R.drawable.indicator_unselected
-                )
-            }
+        sliderIndicatorsView(
+            requireContext(),
+            binding.saleAdsViewPager,
+            binding.indicatorView,
+            indicators,
+            salesAds.size
         )
-        indicators[i]?.layoutParams = layoutParams
-        binding.indicatorView.addView(indicators[i])
-    }
-    indicatorImages.addAll(indicators.filterNotNull())
-}
 
-private fun setCurrentIndicator(index: Int) {
-    for (i in indicatorImages.indices) {
-        val imageView = indicatorImages[i]
-        if (i == index) {
-            imageView.setImageDrawable(
-                context?.let { it1 ->
-                    androidx.core.content.ContextCompat.getDrawable(
-                        it1,
-                        R.drawable.indicator_selected
+        val salesAdapter = SalesAdAdapter(lifecycleScope, salesAds)
+        binding.saleAdsViewPager.apply {
+            adapter = salesAdapter
+            setPageTransformer(DepthPageTransformer())
+            registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    updateIndicators(requireContext(), indicators, position)
+                }
+            })
+        }
+
+        lifecycleScope.launch(IO) {
+            tickerFlow(5000).collect {
+                withContext(Main) {
+                    binding.saleAdsViewPager.setCurrentItem(
+                        (binding.saleAdsViewPager.currentItem + 1) % salesAds.size, true
                     )
                 }
-            )
-        } else {
-            imageView.setImageDrawable(
-                context?.let { it1 ->
-                    androidx.core.content.ContextCompat.getDrawable(
-                        it1,
-                        R.drawable.indicator_unselected
-                    )
-                }
-            )
+            }
+        }
+
+        // add animation from top to bottom
+        binding.saleAdsViewPager.animate().translationY(0f).alpha(1f).setDuration(500).start()
+
+    }
+
+    private fun tickerFlow(period: Long) = flow {
+        while (true) {
+            emit(Unit)
+            delay(period)
         }
     }
-}
+
+    private var indicators = mutableListOf<CircleView>()
+
     private fun goToProductDetails(product: ProductUIModel) {
-        requireActivity().startActivity(
-            Intent(
+        requireActivity().startActivity(Intent(
             requireActivity(), ProductDetailsActivity::class.java
         ).apply {
             putExtra(PRODUCT_UI_MODEL_EXTRA, product)
         })
     }
 
-//    override fun onResume() {
-//        super.onResume()
-//        viewModel.startTimer()
-//    }
-//
-//    override fun onPause() {
-//        super.onPause()
-//        viewModel.stopTimer()
-//    }
+    override fun onResume() {
+        super.onResume()
+        viewModel.startTimer()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.stopTimer()
+    }
+
+    companion object {
+        private const val TAG = "HomeFragment"
+    }
 }
