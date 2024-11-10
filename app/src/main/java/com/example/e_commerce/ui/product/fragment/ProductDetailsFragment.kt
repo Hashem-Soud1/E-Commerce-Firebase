@@ -1,12 +1,12 @@
 package com.example.e_commerce.ui.product.fragment
 
+import android.widget.ImageView
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.example.e_commerce.R
 import com.example.e_commerce.databinding.FragmentProductDetailsBinding
 import com.example.e_commerce.ui.common.fragments.BaseFragment
-import com.example.e_commerce.ui.common.views.CircleView
 import com.example.e_commerce.ui.common.views.sliderIndicatorsView
 import com.example.e_commerce.ui.common.views.updateIndicators
 import com.example.e_commerce.ui.home.model.ProductUIModel
@@ -43,7 +43,7 @@ class ProductDetailsFragment : BaseFragment<FragmentProductDetailsBinding, Produ
         initImagesView(it.images)
     }
 
-    private var indicators = mutableListOf<CircleView>()
+    private var indicators = mutableListOf<ImageView>()
     private fun initImagesView(images: List<String>) {
 
         sliderIndicatorsView(

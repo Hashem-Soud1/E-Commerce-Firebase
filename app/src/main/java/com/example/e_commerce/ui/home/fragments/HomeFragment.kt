@@ -1,6 +1,7 @@
 package com.example.e_commerce.ui.home.fragments
 
 
+import SpaceItemDecoration
 import android.content.Intent
 import android.util.Log
 import android.view.View
@@ -13,13 +14,11 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.e_commerce.R
 import com.example.e_commerce.data.models.Resource
 import com.example.e_commerce.databinding.FragmentHomeBinding
 import com.example.e_commerce.ui.common.fragments.BaseFragment
-import com.example.e_commerce.ui.common.views.CircleView
 import com.example.e_commerce.ui.common.views.loadImage
 import com.example.e_commerce.ui.common.views.sliderIndicatorsView
 import com.example.e_commerce.ui.common.views.updateIndicators
@@ -65,7 +64,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
             viewModel.salesAdsState.collect { resources ->
                 when (resources) {
                     is Resource.Loading -> {
-                        Log.d(TAG, "iniViewModel: Loading")
                     }
 
                     is Resource.Success -> {
@@ -75,7 +73,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
                     }
 
                     is Resource.Error -> {
-                        Log.d(TAG, "iniViewModel: Error")
                     }
                 }
             }
@@ -85,18 +82,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
             viewModel.categoriesState.collect { resources ->
                 when (resources) {
                     is Resource.Loading -> {
-                        Log.d(TAG, "iniViewModel: categories Loading")
                     }
 
                     is Resource.Success -> {
 //                        binding.categoriesShimmerView.root.stopShimmer()
 //                        binding.categoriesShimmerView.root.visibility = View.GONE
-                        Log.d(TAG, "iniViewModel: categories Success = ${resources.data}")
                         initCategoriesView(resources.data)
                     }
 
                     is Resource.Error -> {
-                        Log.d(TAG, "iniViewModel: categories Error")
                     }
                 }
             }
@@ -119,11 +113,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
 
         lifecycleScope.launch {
             viewModel.recommendedSectionDataState.collectLatest { recommendedSectionData ->
-                Log.d(TAG, "Recommended section data: $recommendedSectionData")
                 recommendedSectionData?.let {
-                    setupRecommendedViewData(it)
+                   setupRecommendedViewData(it)
                 } ?: run {
-                    Log.d(TAG, "Recommended section data is null")
 //                    binding.recommendedProductLayout.visibility = View.GONE
                 }
             }
@@ -185,13 +177,16 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
                 requireContext(), LinearLayoutManager.HORIZONTAL, false
             )
             addItemDecoration(HorizontalSpaceItemDecoration(16))
+          //  addItemDecoration(SpaceItemDecoration(spacing = 16, spanCount = 1, includeEdge = true, isHorizontal = true))
         }
         binding.megaSaleRecyclerView.apply {
             adapter = megaSaleAdapter
-            layoutManager = LinearLayoutManager(
-                requireContext(), LinearLayoutManager.HORIZONTAL, false
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false
             )
-            addItemDecoration(HorizontalSpaceItemDecoration(16))
+
+       addItemDecoration(HorizontalSpaceItemDecoration(16))
+   //         addItemDecoration(SpaceItemDecoration(spacing = 16, spanCount = 1, includeEdge = true, isHorizontal = true))
+
         }
         binding.allProductsRv.apply {
             adapter = allProductsAdapter
@@ -199,6 +194,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
                 requireContext(), 2
             )
             addItemDecoration(GridSpacingItemDecoration(2, 16, true))
+         //   addItemDecoration(SpaceItemDecoration(spacing = 16, spanCount = 2, includeEdge = true, isHorizontal = false))
+
         }
     }
 
@@ -249,7 +246,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
         }
     }
 
-    private var indicators = mutableListOf<CircleView>()
+    private var indicators = mutableListOf<ImageView>()
 
     private fun goToProductDetails(product: ProductUIModel) {
         requireActivity().startActivity(Intent(

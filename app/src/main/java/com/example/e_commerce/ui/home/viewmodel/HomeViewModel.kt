@@ -60,16 +60,14 @@ class HomeViewModel @Inject constructor(
 
     val megaSaleState = getProductsSales(ProductSaleType.MEGA_SALE)
 
-    val isEmptyFlashSale = flashSaleState.map { it.isEmpty() }.asLiveData()
 
-    val isEmptyMegaSale = megaSaleState.map { it.isEmpty() }.asLiveData()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val recommendedSectionDataState = specialSectionsRepository.recommendProductsSection().stateIn(
         viewModelScope + IO, started = SharingStarted.Eagerly, initialValue = null
     ).mapLatest { it?.toSpecialSectionUIModel() }
 
-    val isRecommendedSection = recommendedSectionDataState.map { it == null }.asLiveData()
+
 
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -99,9 +97,9 @@ class HomeViewModel @Inject constructor(
     private val _allProductsState: MutableStateFlow<List<ProductUIModel>> =
         MutableStateFlow(emptyList())
     val allProductsState = _allProductsState.asStateFlow()
-    val isLoadingAllProducts = MutableStateFlow(false)
-    val isFinishedLoadAllProducts = MutableStateFlow(false)
-    var lastDocumentSnapshot: DocumentSnapshot? = null
+    private val isLoadingAllProducts = MutableStateFlow(false)
+    private val isFinishedLoadAllProducts = MutableStateFlow(false)
+    private var lastDocumentSnapshot: DocumentSnapshot? = null
 
     fun getNextProducts() = viewModelScope.launch(IO) {
         if (isFinishedLoadAllProducts.value) return@launch

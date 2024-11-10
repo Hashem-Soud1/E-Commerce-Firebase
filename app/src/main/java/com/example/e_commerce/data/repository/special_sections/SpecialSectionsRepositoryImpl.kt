@@ -14,12 +14,14 @@ import javax.inject.Inject
 class SpecialSectionsRepositoryImpl @Inject constructor(
     private val firestore: FirebaseFirestore
 ) : SpecialSectionsRepository {
-    override fun recommendProductsSection() = flow {
+
+    override fun recommendProductsSection()
+    = flow {
         try {
             val specialSection = firestore.collection("special_sections")
                 .document(SpecialSections.RECOMMENDED_PRODUCTS.id).get().await()
                 .toObject(SpecialSectionModel::class.java)
-
+            Log.d(TAG, "recommendProductsSection: $specialSection.")
             emit(specialSection)
         } catch (e: Exception) {
             val msg = e.message ?: "Error fetching recommended products"

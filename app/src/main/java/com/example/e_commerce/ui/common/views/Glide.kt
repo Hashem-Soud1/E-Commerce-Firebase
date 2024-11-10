@@ -12,15 +12,15 @@ import com.example.e_commerce.R
 
 @BindingAdapter("imageUrl")
 fun loadImage(view: ImageView, imageUrl: String?) {
-//    val loading = getGlideCircleLoading(view)
-//
-//    Glide.with(view.context)
-//        .load(imageUrl)
-//        .placeholder(loading)
-//        .diskCacheStrategy(DiskCacheStrategy.ALL)
-////        .signature(Object())
-//        .transform(CenterCrop(), RoundedCorners(16), )
-//        .into(view)
+    val loading = getGlideCircleLoading(view)
+
+    Glide.with(view.context)
+        .load(imageUrl)
+        .placeholder(loading)
+        .diskCacheStrategy(DiskCacheStrategy.ALL)
+//        .signature(Object())
+        .transform(CenterCrop(), RoundedCorners(16), )
+        .into(view)
 
 
     Glide.with(view.context)

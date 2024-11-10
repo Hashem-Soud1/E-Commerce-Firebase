@@ -32,14 +32,15 @@ class ProductsRepositoryImp @Inject constructor(
     }
 
     override suspend fun getAllProductsPaging(
+
         countryID: String, pageLimit: Long, lastDocument: DocumentSnapshot?
     ) = flow<Resource<QuerySnapshot>> {
         try {
             emit(Resource.Loading())
 
             var firstQuery = firestore.collection("product")
+                .whereEqualTo("country_id", countryID)
                 .orderBy("price")
-
             if (lastDocument != null) {
                 firstQuery = firstQuery.startAfter(lastDocument)
             }
@@ -54,10 +55,10 @@ class ProductsRepositoryImp @Inject constructor(
     }
     override fun listenToProductDetails(productID: String): Flow<ProductModel> {
         return callbackFlow {
-            val listener = firestore.collection("products").document(productID)
+
+            val listener = firestore.collection("product").document(productID)
                 .addSnapshotListener { value, error ->
                     if (error != null) {
-                //        Log.d(TAG, "listenToProductDetails: ${error.message}")
                         close(error)
                         return@addSnapshotListener
                     }

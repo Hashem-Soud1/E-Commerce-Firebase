@@ -45,15 +45,15 @@ class SalesAdAdapter(
     }
 }
 
-//@BindingAdapter("countdownTimer", "lifecycleScope")
-//fun timerChanges(
-//    view: TextView,
-//    timerState: MutableStateFlow<String>?,
-//    lifecycleScope: LifecycleCoroutineScope?
-//) {
-//    lifecycleScope?.launch {
-//        timerState?.collectLatest {
-//            view.text = it
-//        }
-//    }
-//}
+@BindingAdapter("countdownTimer", "lifecycleScope")
+fun timerChanges(
+    view: TextView,
+    timerState: MutableStateFlow<String>?,
+    lifecycleScope: LifecycleCoroutineScope?
+) {
+    lifecycleScope?.launch {
+        timerState?.collectLatest {
+            view.text = it
+        }
+    }
+}
