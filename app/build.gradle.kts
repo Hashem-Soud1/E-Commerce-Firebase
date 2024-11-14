@@ -7,6 +7,7 @@ plugins {
     id("com.google.protobuf") version "0.9.4" apply true
     id("kotlin-parcelize")
     id("com.google.dagger.hilt.android")
+    id("org.jetbrains.kotlin.plugin.compose") version "2.0.0"
 
 
 
