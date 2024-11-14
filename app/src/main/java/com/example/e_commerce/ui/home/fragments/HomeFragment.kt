@@ -168,7 +168,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
             goToProductDetails(it)
         }
     }
-    private val allProductsAdapter by lazy { ProductAdapter { goToProductDetails(it) } }
+    private val allProductsAdapter by lazy {
+        ProductAdapter(viewType = ProductViewType.GRID) {
+            goToProductDetails(it)
+        }
+
+    }
 
     private fun initViews() {
         binding.flashSaleRecyclerView.apply {
