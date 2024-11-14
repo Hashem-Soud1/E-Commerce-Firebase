@@ -1,4 +1,4 @@
-package com.example.e_commerce.ui.common
+package com.example.e_commerce.ui.common.model
 
 import android.os.Parcelable
 import androidx.annotation.Keep

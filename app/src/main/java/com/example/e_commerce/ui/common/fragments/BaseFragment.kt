@@ -62,6 +62,8 @@ abstract class BaseFragment<DB : ViewDataBinding, VM : ViewModel> : Fragment() {
         _binding = null
     }
 
+
+
 }
 
 

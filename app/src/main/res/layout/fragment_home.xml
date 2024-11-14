@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewmodel"
+            type="com.example.e_commerce.ui.home.viewmodel.HomeViewModel" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".YourActivity">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+
+            >
+
+
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="79dp"
+                    android:background="@color/white"
+                    app:layout_collapseMode="pin"
+                    app:layout_scrollFlags="scroll|enterAlways"                    >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="8dp"
+                        android:orientation="horizontal"
+                        android:paddingTop="8dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="11"
+                            android:background="@drawable/edit_text_bg"
+                            android:drawablePadding="16dp"
+                            android:padding="16dp"
+                            android:text="@string/search_products"
+                            android:textColor="@color/neutral_grey"
+                            app:drawableStartCompat="@drawable/ic_search_primary" />
+
+                        <ImageButton
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:layout_weight="1"
+                            android:background="@color/white"
+                            android:padding="8dp"
+                            android:src="@drawable/ic_love" />
+
+                        <ImageButton
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="16dp"
+                            android:layout_weight="1"
+                            android:background="@color/white"
+                            android:padding="8dp"
+                            android:src="@drawable/ic_notification" />
+
+                    </LinearLayout>
+
+                </androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/neutral_light" />
+
+       <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+           <androidx.viewpager2.widget.ViewPager2
+               android:id="@+id/sale_ads_view_pager"
+               android:layout_width="match_parent"
+               android:layout_height="220dp"
+               android:layout_alignParentEnd="true"
+               android:layout_alignParentBottom="true"
+               android:layout_marginEnd="-2dp"
+               android:layout_marginBottom="0dp"
+               android:nestedScrollingEnabled="true"
+               app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+           <include
+          android:id="@+id/shimmer_sales_ads"
+           layout="@layout/shimmer_item_sales_ads"
+
+         />
+     </RelativeLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/indicator_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="horizontal" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:paddingStart="16dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="8dp">
+
+                    <TextView
+                        style="@style/TitleTextStyle"
+                        android:layout_height="26dp"
+                        android:layout_weight="1"
+                        android:text="@string/category"
+                        android:layout_width="0dp" />
+
+                    <TextView
+                        android:id="@+id/more_categories_tv"
+                        style="@style/MediumPrimaryTextViewStyle"
+                        android:layout_gravity="center"
+                        android:text="@string/more_categories"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/categories_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+
+
+                <LinearLayout
+                    android:id="@+id/flash_sale_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:paddingStart="16dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="8dp"
+                    android:tag="flash_sale_layout"
+                  >
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        style="@style/TitleTextStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/flash_sale" />
+
+                    <TextView
+                        android:id="@+id/flash_see_more_tv"
+                        style="@style/MediumPrimaryTextViewStyle"
+                        android:layout_gravity="center"
+                        android:text="@string/see_more"
+                        android:textSize="16sp" />
+                </LinearLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/flash_sale_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <LinearLayout
+                    android:id="@+id/mega_sale_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:paddingStart="16dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="8dp"
+                    android:tag="mega_sale_layout"
+                   >
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        style="@style/TitleTextStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/mega_sale" />
+
+                    <TextView
+                        android:id="@+id/mega_see_more_tv"
+                        style="@style/MediumPrimaryTextViewStyle"
+                        android:layout_gravity="center"
+                        android:text="@string/see_more"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/mega_sale_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+
+
+
+
+                <RelativeLayout
+                    android:id="@+id/recommended_product_layout"
+
+                    android:layout_width="match_parent"
+                    android:padding="8dp"
+                    android:layout_height="200dp">
+
+                    <ImageView
+                        android:id="@+id/recommended_product_iv"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        tools:src="@drawable/promo_image" />
+
+                    <TextView
+                        android:id="@+id/recommended_product_title_iv"
+                        android:layout_width="300dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_margin="18dp"
+                        android:fontFamily="@font/poppins_bold"
+                        android:textColor="@android:color/white"
+                        android:textSize="28sp"
+                        android:textStyle="bold"
+                        tools:text="Recommended Product" />
+
+                    <TextView
+                        android:id="@+id/recommended_product_description_iv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_margin="18dp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:textColor="@android:color/white"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        tools:text="We recommend the best for you" />
+                </RelativeLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/all_products_rv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    android:paddingStart="8dp"
+                    android:tag="mega_sale_rv"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+
+
+
+            </LinearLayout>
+
+
+
+
+
+
+        </androidx.core.widget.NestedScrollView>
+
+
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+</layout>

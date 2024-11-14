@@ -35,6 +35,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import org.checkerframework.checker.units.qual.C
 
 @AndroidEntryPoint
 
@@ -52,6 +53,9 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
         initListeners()
         initViewModel()
 
+        val countryFragment = CountryFragment()
+        countryFragment.isCancelable = false
+        countryFragment.show(parentFragmentManager, "country-fragment")
 
     }
 

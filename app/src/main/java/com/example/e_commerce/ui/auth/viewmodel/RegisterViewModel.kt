@@ -44,19 +44,19 @@ class RegisterViewModel @Inject constructor(
 
     fun registerWithEmailAndPassword() = viewModelScope.launch(Dispatchers.IO) {
 
-        val registerRequestModel = RegisterRequestModel(
-            fullName = name.value,
-            email = email.value,
-            password = password.value
-        )
-        if (isRegisterIsValid.first()) {
-            // handle register flow
-            authRepository.registerWithEmailAndPasswordWithApi(registerRequestModel).collect {
-                _registerState.emit(it)
-            }
-        } else {
-            // emit error
-        }
+//        val registerRequestModel = RegisterRequestModel(
+//            fullName = name.value,
+//            email = email.value,
+//            password = password.value
+//        )
+//        if (isRegisterIsValid.first()) {
+//            // handle register flow
+//            authRepository.registerWithEmailAndPasswordWithApi(registerRequestModel).collect {
+//                _registerState.emit(it)
+//            }
+//        } else {
+//            // emit error
+//        }
     }
 
     fun signUpWithGoogle(idToken: String) = viewModelScope.launch {
