@@ -25,6 +25,7 @@ data class ProductUIModel(
 ) : Parcelable {
 
 
+val formatPrice  get()= "$currencySymbol$price"
 
     fun getFormattedPrice(): String {
         return "$currencySymbol$price"

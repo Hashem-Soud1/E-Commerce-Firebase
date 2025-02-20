@@ -12,6 +12,7 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,8 +27,12 @@ class ProductDetailsViewModel @Inject constructor(
             ?: throw IllegalArgumentException("ProductUIModel is required")
     }
 
-    private val _productDetailsState: MutableStateFlow<ProductUIModel> = MutableStateFlow(productUiModel)
-    val productDetailsState = _productDetailsState.asStateFlow()
+    private val _productDetailsState: MutableStateFlow<ProductUIModel> =
+        MutableStateFlow(productUiModel)
+    val productDetailsState = _productDetailsState
+        .asStateFlow()
+
+
 
     init {
         listenToProductDetails()
